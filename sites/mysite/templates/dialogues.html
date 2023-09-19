@@ -1,0 +1,46 @@
+{%extends 'base.html'%}
+{% load static %}
+
+{%block title%}Диалоги{%endblock%}
+
+
+{%block content%}
+    <div class="wrapper_users">
+    {% include "header.html" %}
+    <div class="rows_user">
+
+        <div class="col1_user">
+            {% include "menu.html" %}
+        </div>
+        <div class="col2_user">
+
+            <div class="dialogs__content">
+                {% if allDialogues %}
+                {% for dialog in allDialogues %}
+                <div class="dialogs__message">
+                    <div class="dialogs__image">
+                        <a href="{% url 'viewUser' dialog.user_sender_id %}"><img class="img" src="{% static dialog.avatar|cut:'mysite/static' %}"></a>
+                    </div>
+                    <div class="dialogs__text">
+                        <div class="dialogs__name">
+                            <a href="{% url 'viewUser' dialog.user_sender_id %}">{{ dialog.name_sender }}</a>
+                        </div>
+                        <div class="dialog__message">
+                            <a href="{% url 'viewDialogues' dialog.user_sender_id %}">{{ dialog.name_recipient }}: {% if dialog.status_message == 1 %}<span>{{ dialog.last_message }}</span>{% else %}<span style="font-weight: 900;">{{ dialog.last_message }}</span>{% endif %}</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="none_dialogs">
+                    <span>Вы пока ни с кем не общались.</span>
+                </div>
+                {% endif %}
+            </div>
+
+
+        </div>
+
+    </div>     
+    </div>
+{%endblock%}

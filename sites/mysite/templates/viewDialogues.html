@@ -1,0 +1,86 @@
+{%extends 'base.html'%}
+{% load static %}
+
+{%block title%}Диалоги{%endblock%}
+
+
+{%block content%}
+    <div class="wrapper_users">
+    {% include "header.html" %}
+    <div class="rows_user">
+
+        <div class="col1_user">
+            {% include "menu.html" %}
+        </div>
+        <div class="col2_user">
+            {% for row in user_info %}
+            <div class="user__info">
+                <div class="user__info__row">
+                    <div class="user__name_photo">
+                        <a href="{% url 'viewUser' row.id %}"><img src="{% static row.avatar|cut:'mysite/static' %}" class="img"></a>
+                    </div>
+                    <div class="user__name">                    
+                        <div class="user__first_name">
+                            <a href="{% url 'viewUser' row.id %}">{{ row.first_name }} {{ row.last_name }}</a>
+                        </div>     
+                        <div class="user__time">
+                            {% if row.last_login %}Последний раз был в сети: {{ row.last_login }} {% else %} Данный пользователь еще не появлялся в сети.{% endif %}
+                        </div>       
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+            <div class="dialogs__content2">                
+                <div class="dialogs__items">
+                    {% if dialogues %}
+                    {% for item in dialogues %}                    
+                    <div class="dialogs__item">
+                        <div class="dialogs__info">
+                            <div class="dialogs__image">
+                                <a href="{% url 'viewUser' item.user_sender_id %}"><img class="img" src="{% static item.avatar|cut:'mysite/static' %}"></a>
+                            </div>
+                            <div class="dialogs__sender">
+                                <a href="{% url 'viewUser' item.user_sender_id %}" class=''>{{ item.first_name }}</a><span class="dialogs__time">{{item.time_create}}</span>
+                                <div class="dialog__message">
+                                    {{ item.private_message }}
+                                    {% if item.private_img %} 
+                                    <div class="message__pic">
+                                        <img src="{% static item.private_img|cut:'mysite/static' %}">
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="none_dialogs">
+                        <span>У вас нет переписки с данным пользователем.</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                
+                
+            </div>
+
+            <div class="dialog_form">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="flex_obj">
+                      <div class="wall_form">
+                        {{ form.private_message }}
+                        <div class="error">{{ form.private_message.errors }}</div> 
+                      </div>
+                        {{ form.private_img }} 
+                        <label for="id_private_img" class='clip_icon bi bi-paperclip' style='font-size: 1.5rem; color: #204768;'></label>
+                        <div class="wall_form_button">                         
+                            <button type="submit">Отправить</button>
+                        </div>
+                </form>   
+            </div>
+
+        </div>
+    </div>     
+{%endblock%}

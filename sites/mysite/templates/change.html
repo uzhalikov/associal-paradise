@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{%block title%}
+Редактирование профиля
+{%endblock%}
+
+
+{%block content%}
+
+<div class="wrapper_change">
+    {% include "header.html" %}
+    <div class="rows_change">
+
+        <div class="col1_change">
+            {% include "menu.html" %}
+        </div>
+
+        <div class="col2_change">
+
+                <form method="post" class="change_content_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                        <ul class="form_list">                                
+                            <li class="form_list">{{ form.as_p }}</li>                   
+                        </ul>    
+                    <input type="submit" value="Сохранить изменения">
+                </form>
+        </div>
+    </div>     
+    </div>
+
+{%endblock%}

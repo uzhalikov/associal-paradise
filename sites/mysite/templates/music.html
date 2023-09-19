@@ -1,0 +1,76 @@
+{%extends 'base.html'%}
+{% load static %}
+
+{%block title%}Мои фотографии{%endblock%}
+
+
+{%block content%}
+    <div class="wrapper_users">
+    {% include "header.html" %}
+        <div class="rows_user">
+
+            <div class="col1_user">
+                {% include "menu.html" %}
+            </div>
+            <div class="col2_user">
+                <div class="add_music">
+                    <span>Добавить музыку</span>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="flex_obj">
+                            <div class="photos_form">
+                                {{ form.title }}
+                                <div class="error">{{ form.img.errors }}</div> 
+                            </div>                            
+                            {{ form.song }}
+                            <label for="id_song" class='photos_clip_icon bi bi-paperclip' style='font-size: 1.5rem; color: #204768;'></label>
+                            <div class="photos_form_button">
+                                <button type="submit">Добавить</button>
+                            </div>                            
+                        </div>
+                    </form>
+                </div>
+                <div class="view_music">    
+                    {% if allSong %}                
+                    {% for song in allSong %}
+                    <div class="view_song">
+                        <div class="song_key">
+                            <span class="song_title">{{ song.title }}</span>
+                        </div>
+                        <div class="song_value">
+                            <audio controls src="{% static song.song|cut:'mysite/static' %}" class="view_song_item" type="audio/mpeg"></audio>
+                        </div>                        
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="none_photos">
+                        <span class="none_photos_span">Вы пока не добавили ни одной песни. Скорей исправьте это!</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>     
+    </div>
+    <script>
+        let audio_list = document.querySelectorAll('audio')
+        let audio = Array.apply(null, audio_list)
+
+        audio.forEach(element=> {
+            let index = audio.indexOf(element);
+            element.addEventListener('play', ()=> {
+                audio.forEach(subElement => {
+                    subElement !== audio[index] ?
+                    (subElement.pause(), subElement.currentTime = 0) :
+                    subElement.play()
+                })
+            })
+            element.addEventListener('ended', ()=> {
+                element.currentTime = 0;
+                index !== audio.length - 1 ?
+                    audio[index + 1].play() : 
+                    audio[0].play()
+            })
+        });
+    </script>
+
+{%endblock%}

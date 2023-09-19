@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{%block title%}Моя страница{%endblock%}
+
+{%block content%}
+    <div class="wrapper_main">
+      <div class="content">
+        {% include "header.html" %}
+
+         
+        <div class="container">
+          <div class="row">  
+            <div class="col1">
+              {% include "menu.html" %}
+
+            </div>
+    
+            <div class="col2">
+              <div class="avatarka">
+                <img src="{% static personal_data.avatar|cut:'mysite/static' %}" class="avatarka_img">
+              </div>
+              <a href="{% url 'users' %}" class="">Мои друзья</a>                    
+                <div class="friend_list">
+                  {% for user in allUsers %}                   
+                  <div class="friends_item">
+                    <div class="friends_item_name">
+                      <a href="{% url 'viewUser' user.id %}">
+                        {{ user.first_name }}
+                        <div class="friends_item_img">
+                          <img src="{% static user.avatar|cut:'mysite/static' %}">
+                        </div>                        
+                      </a>                     
+                    </div>
+                  </div>                      
+                  {% endfor %}
+                </div>
+            </div>
+
+
+
+                <div class="col3">
+                  <div class="personal_info">     
+                    <div class="user_name">{{personal_data.first_name}} {{personal_data.last_name}}</div>             
+                    <div class="header_info">
+                      <div class="key_list">                      
+                        {% if personal_data.gender %}<div class="user_key">Пол: </div>{% endif %}
+                        {% if personal_data.birthdate %}<div class="user_key">Дата рождения: </div>{% endif %}
+                        {% if personal_data.hometown %}<div class="user_key">Родной город: </div>{% endif %}
+                        {% if personal_data.telegram or personal_data.instagram or personal_data.phone or personal_data.email %}
+                        <div class="contact_info">Контактная информация</div>
+                        {% endif %}
+                        {% if personal_data.telegram %}<div class="user_key">Telegram: </div>{% endif %}
+                        {% if personal_data.instagram %}<div class="user_key">Instagram: </div>{% endif %}
+                        {% if personal_data.phone %}<div class="user_key">Телефон: </div>{% endif %}
+                        {% if personal_data.email %}<div class="user_key">E-mail: </div>{% endif %}
+                        {% if personal_data.fav_music or personal_data.fav_movies or personal_data.fav_quotes or personal_data.ciggar or personal_data.alco or personal_data.religion or personal_data.about %}
+                        <div class="contact_info">Личная информация</div>
+                        {% endif %}
+                        {% if personal_data.fav_music %}<div class="user_key">Любимая музыка: </div>{% endif %}
+                        {% if personal_data.fav_movies %}<div class="user_key">Любимые фильмы: </div>{% endif %}
+                        {% if personal_data.fav_quotes %}<div class="user_key">Любимые цитаты: </div>{% endif %}
+                        {% if personal_data.ciggar %}<div class="user_key">Отношение к курению: </div>{% endif %}
+                        {% if personal_data.alco %}<div class="user_key">Отношение к алкоголю: </div>{% endif %}
+                        {% if personal_data.religion %}<div class="user_key">Религия: </div>{% endif %}
+                        {% if personal_data.about %}<div class="user_key">Коротко про меня: </div>{% endif %}
+                      </div>
+                      <div class="value_list">
+                        {% if personal_data.gender %}<div class="user_value">{{personal_data.get_gender_display}}</div>{% endif %}
+                        {% if personal_data.birthdate %}<div class="user_value">{{personal_data.birthdate}}</div>{% endif %}
+                        {% if personal_data.hometown %}<div class="user_value">{{personal_data.hometown}}</div>{% endif %}
+                        {% if personal_data.telegram or personal_data.instagram or personal_data.phone or personal_data.email %}
+                        <div class="contact_info_2">1</div>
+                        {% endif %}
+                        {% if personal_data.telegram %}<div class="user_value"><a href="https://t.me/{{personal_data.telegram}}">{{personal_data.telegram}}</a></div>{% endif %}
+                        {% if personal_data.instagram %}<div class="user_value">{{personal_data.instagram}}</div>{% endif %}
+                        {% if personal_data.phone %}<div class="user_value">{{personal_data.phone}}</div>{% endif %}
+                        {% if personal_data.email %}<div class="user_value">{{personal_data.email}}</div>{% endif %}
+                        {% if personal_data.fav_music or personal_data.fav_movies or personal_data.fav_quotes or personal_data.ciggar or personal_data.alco or personal_data.religion or personal_data.about %}
+                        <div class="contact_info_2">1</div>
+                        {% endif %}
+                        {% if personal_data.fav_music %}<div class="user_value">{{personal_data.fav_music}}</div>{% endif %}
+                        {% if personal_data.fav_movies %}<div class="user_value">{{personal_data.fav_movies}}</div>{% endif %}
+                        {% if personal_data.fav_quotes %}<div class="user_value">{{personal_data.fav_quotes}}</div>{% endif %}
+                        {% if personal_data.ciggar %}<div class="user_value">{{personal_data.get_ciggar_display}}</div>{% endif %}
+                        {% if personal_data.alco %}<div class="user_value">{{personal_data.get_alco_display}}</div>{% endif %}
+                        {% if personal_data.religion %}<div class="user_value">{{personal_data.get_religion_display}}</div>{% endif %}
+                        {% if personal_data.about %}<div class="user_value">{{personal_data.about}}</div>{% endif %}
+                      </div>
+                    </div>
+
+              
+                {% if userPhoto %}
+                <div class="user_photos">                
+                  <span class="user_photos_span contact_info">Лента фотографий</span>
+                  <div class="user_photos_key">
+                    {% for photo in userPhoto %}
+                    <div class="user_photos_value">
+                      <img src="{% static photo.img|cut:'mysite/static' %}" class="user_photo_item">
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                {% endif %}
+                
+                <div class="wall">
+                  <div class="wall_span">
+                    <span class="wall_span_header">Стена</span>
+                  </div>
+                  <div class="posting">
+                    <form method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <div class="flex_obj">
+                        <div class="wall_form">
+                          {{ form.content }}
+                          <div class="error">{{ form.title.errors }}</div> 
+                        </div>
+                        {{ form.img }} 
+                        <label for="id_img" class='clip_icon bi bi-paperclip' style='font-size: 1.5rem; color: #204768;'></label>
+                        <div class="wall_form_button">                         
+                          <button type="submit">Опубликовать</button>
+                        </div>
+                    </form>                    
+                  </div>
+                  {% if posts %}
+                  <div class="wall_content">
+                  {% for i in posts %}                  
+                    <div class="wall_content_items">
+
+                      <div class="wall_content__avatar">
+                        <img src="{% static i.avatar|cut:'mysite/static' %}" class="img">
+                      </div>
+
+                      <div class="wall_content__info">
+                        <div class="name__url">
+                          <a href="{% url 'viewUser' i.user_sender_id %}">{{ i.first_name }}</a>
+                        </div>
+
+                        <div class="wall_content__time">
+                          <span>{{ i.time_create }}</span>
+                        </div>
+                        
+                        <div class="wall_content_key">
+                          {{ i.content }}
+                        </div>   
+
+                        <div class="wall_img">
+                        {% if i.img %}                      
+                          <img src="{% static i.img|cut:'mysite/static' %}">
+                        {% endif %} 
+                        </div> 
+
+                      </div> 
+                      </div>   
+
+                  {% endfor %}
+                </div>
+                  </div>
+                  {% else %}
+                    <div class="none_photos">
+                      <p>Пока нет записей, но это временно.</p>
+                    </div>    
+                  {% endif %}
+                </div>                   
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+{%endblock%}

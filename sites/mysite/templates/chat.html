@@ -1,0 +1,65 @@
+{%extends 'base.html'%}
+{% load static %}
+
+{%block title%}Чат{%endblock%}
+
+
+{%block content%}
+    <div class="wrapper_users">
+    {% include "header.html" %}
+        <div class="rows_user">
+
+            <div class="col1_user">
+                {% include "menu.html" %}
+            </div>
+
+            <div class="col2_user">
+                    <div class="add_message">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="flex_obj">
+                                <div class="wall_form">
+                                    {{ form.msg }}
+                                </div>
+                                {{ form.msg_img }}
+                                <label for="id_msg_img" class='clip_icon bi bi-paperclip' style='font-size: 1.5rem; color: #204768;'></label>
+                                <div class="wall_form_button">                         
+                                    <button type="submit">Отправить</button>
+                                </div>                                  
+                        </form>
+                    </div> 
+
+                <div class="chat">                      
+                    {% for message in allMessages %}
+                    <div class="message">
+                        <div class="message__user_photo">    
+                            <a href="{% url 'viewUser' message.user_id %}">
+                                <img class="img" src="{% static message.avatar|cut:'mysite/static' %}">
+                            </a>
+                        </div>
+
+                        <div class="message__content">
+                            <span class="message__user">
+                                <a href="{% url 'viewUser' message.user_id %}">{{ message.first_name }}</a>
+                            </span>
+                            <span class="message__time">[{{ message.msg_time_create }}]</span> 
+                            <div class="message__item">
+                                <div class="message__text">
+                                    {{ message.msg }}
+                                </div>
+                                {% if message.msg_img %} 
+                                <div class="message__pic">
+                                    <img src="{% static message.msg_img|cut:'mysite/static' %}">
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+            </div>  
+       
+  
+            </div>
+        </div>  
+    </div>
+{%endblock%}

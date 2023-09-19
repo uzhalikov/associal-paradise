@@ -1,0 +1,13 @@
+{%extends 'base.html'%}
+{% load static %}
+
+{%block content%}
+<header class="header">   
+
+      <ul class="header__sidebar">
+        <li class="header__logo"><a href="{% url 'home' %}">associal paradise</a></li>
+        <li class="header__item"><a href="{% url 'home' %}">{{personal_data.first_name}}</a> | <a type="submit" href="{% url 'out' %}">Выйти</a></li>
+      </ul>
+
+ </header> 
+{%endblock%}

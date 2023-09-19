@@ -1,0 +1,50 @@
+{%extends 'base.html'%}
+{% load static %}
+<!doctype html>
+<html lang="ru">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+{%block title%}Лучшая социальная сеть для интровертов{%endblock%}
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400&display=swap" rel="stylesheet">
+	<link type="text/css" href="{% static 'css/index.css' %}" rel="stylesheet">
+	<link rel="icon" href="{% static 'mysite/images/ico.png' %}">
+</head>
+{%block content%}
+	<div class="wrapper">
+
+		<div class="logo">
+			<p>associal paradise</p>
+		</div>
+
+		<div class="content">
+			<nav class="nav">
+				<form action="" class="auth" method="POST">
+					{% csrf_token %}
+					<h2 class="h2">Восстановление пароля</h2>
+					<div class="forgot_mail">
+						<input type="email" class="forgot_mail_input" placeholder="Электронная почта" name="mail">
+					</div>
+					<div class="auth_enter">
+						<input type="submit" class="forgot_enter_btn" value="Восстановить">
+					</div>
+				</form>
+				<div class="go_reg">
+					<a href="/" class="reg">Вернуться</a>
+				</div>
+			</nav>
+		</div>
+		<div class="errors">
+			{{err}}
+		</div>
+		<div class="success">
+			{{scs}}
+		</div>
+	</div>
+{%endblock%}

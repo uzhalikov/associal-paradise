@@ -1,0 +1,50 @@
+{%extends 'base.html'%}
+{% load static %}
+
+{%block title%}Мои фотографии{%endblock%}
+
+
+{%block content%}
+    <div class="wrapper_users">
+    {% include "header.html" %}
+        <div class="rows_user">
+
+            <div class="col1_user">
+                {% include "menu.html" %}
+            </div>
+            <div class="col2_user">
+                <div class="add_photo">
+                    <span>Добавить фотографии</span>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="flex_obj">
+                            <div class="photos_form">
+                            {{ form.content }}
+                            <div class="error">{{ form.img.errors }}</div>
+                            </div>
+                            {{ form.img }}
+                            <label for="id_img" class='photos_clip_icon bi bi-paperclip' style='font-size: 1.5rem; color: #204768;'></label>
+                            <div class="error">{{ form.img.errors }}</div>
+                            <div class="photos_form_button">
+                                <button type="submit">Загрузить фотографию</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {% if userPhoto %}
+                <div class="view_photos">
+                    {% for photo in userPhoto %}
+                    <div class="view_photo">
+                        <img src="{% static photo.img|cut:'mysite/static' %}" class="view_photo_item">
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="none_photos">
+                    <span class="none_photos_span">Вы пока не добавили ни одной фотографии. Скорей исправьте это!</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>     
+    </div>
+{%endblock%}
