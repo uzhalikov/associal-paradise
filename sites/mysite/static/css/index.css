@@ -123,6 +123,7 @@ a{
     display: flex;
     justify-content: space-between;
     padding: 2.5px 0 7px 0;
+    color: white;
 }
 .header__logo{    
     font-family: 'Caveat', cursive;
@@ -139,7 +140,6 @@ a{
     width: 100%;
     height: 100%;
     object-fit: cover;
-    margin: 0 0 5px 0;
 }
 .item_li{
     margin: 0 0 6px 0;
@@ -225,15 +225,20 @@ a{
     flex-wrap:wrap;
     border: 1px solid;
     border-radius: 5px;
-    padding: 10px;
-    margin: 5px 0 5px 0;
+    padding: 5px 0 0 5px;
+    margin: 5px 0 0 0;
  }
-.view_photo_item{
-    width: 200px;
-    height: 200px;
+ .view_photo{
+    width: 218.2px;
+    height: 218.2px;
+    margin: 0 5px 5px 0;
+ }
+.view_photo img{
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: 5px;    
-    margin: 0 2.5px 2px 0;
+    cursor: pointer;
+    border-radius: 5px;
 }
 .view_song{
     padding: 1px 5px 1px 5px;
@@ -328,14 +333,13 @@ audio{
 .wall_content_key{
     margin: 5px 0 0 0;
 }
-.friend_list{
+.friend_list, .followers__list{
     display: flex;
     flex-wrap:wrap;
     justify-content: space-between;
     border: 1px solid #204768;
     border-radius: 7px;
     width: 300px;
-    margin: 5px 0 0 0;
 }
 .friend_list a{
     color: #204768;
@@ -417,14 +421,20 @@ audio{
     border-radius: 50%;
     object-fit:scale-down;
 }
-.friends_item_name img{
+.followers__span, .friends__span{
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 0 0 2px 0;
+}
+.friends_item_name img, .item__name img{
     width: 75px;
     height: 75px;
     border-radius: 50%;
     object-fit: cover;
     margin: 2px 0 0 0;
 }
-.friends_item{
+.friends_item, .followers__item{
     text-align: center;
     padding: 5px;
 }
@@ -441,12 +451,30 @@ audio{
     font-size: 20px;
     color: rgb(90, 90, 90);
 }
-.add_friend{
+.send__message{
     padding: 2px 0 2px 0;
     border: 1px solid #204768;
     border-radius: 5px;
     background-color: #f3f3f3;
     text-align: center;
+    display: block;
+    font-size: 16px;
+    margin: 2px 0 2px 0;
+}
+.add__friend__btn{
+    border: 1px solid #204768;
+    width: 100%;
+    border-radius: 5px;
+    padding: 2px 0 2px 0;
+    font-size: 16px;
+    margin: 2px 0 0 0;
+}
+.send__req, .delete__friend{
+    padding: 2px 0 2px 0;
+    text-align: center;
+    margin: 0 0 2px 0;
+    cursor: default;
+    font-size: 15px;
 }
 .chat{
     height: 840px;

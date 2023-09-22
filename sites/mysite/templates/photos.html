@@ -5,6 +5,7 @@
 
 
 {%block content%}
+
     <div class="wrapper_users">
     {% include "header.html" %}
         <div class="rows_user">
@@ -35,7 +36,7 @@
                 <div class="view_photos">
                     {% for photo in userPhoto %}
                     <div class="view_photo">
-                        <img src="{% static photo.img|cut:'mysite/static' %}" class="view_photo_item">
+                        <img src="{% static photo.img|cut:'mysite/static' %}">
                     </div>
                     {% endfor %}
                 </div>

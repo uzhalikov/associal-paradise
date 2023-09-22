@@ -20,25 +20,41 @@
               <div class="avatarka">
                 <img src="{% static personal_data.avatar|cut:'mysite/static' %}" class="avatarka_img">
               </div>
-              <a href="{% url 'users' %}" class="">Мои друзья</a>                    
+              {% if friends %}
+              <span class="friends__span">Мои друзья</span>
                 <div class="friend_list">
-                  {% for user in allUsers %}                   
-                  <div class="friends_item">
-                    <div class="friends_item_name">
-                      <a href="{% url 'viewUser' user.id %}">
-                        {{ user.first_name }}
-                        <div class="friends_item_img">
-                          <img src="{% static user.avatar|cut:'mysite/static' %}">
-                        </div>                        
-                      </a>                     
+                    {% for friend in friends %}
+                    <div class="friends_item">
+                      <div class="friends_item_name">
+                        <a href="{% url 'viewUser' friend.user_id %}">
+                          {{ friend.first_name }}
+                          <div class="friends_item_img">
+                            <img src="{% static friend.avatar|cut:'mysite/static' %}">
+                          </div>
+                        </a>
+                      </div>
                     </div>
-                  </div>                      
-                  {% endfor %}
+                    {% endfor %}
                 </div>
+              {% endif %}
+              {% if followers %}
+              <span class="friends__span">Мои подписчики</span>
+                <div class="friend_list">
+                    {% for follower in followers %}
+                    <div class="friends_item">
+                      <div class="friends_item_name">
+                        <a href="{% url 'viewUser' follower.from_user %}">
+                          {{ follower.first_name }}
+                          <div class="friends_item_img">
+                            <img src="{% static follower.avatar|cut:'mysite/static' %}">
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                    {% endfor %}
+                </div>
+              {% endif %}
             </div>
-
-
-
                 <div class="col3">
                   <div class="personal_info">     
                     <div class="user_name">{{personal_data.first_name}} {{personal_data.last_name}}</div>             
@@ -103,6 +119,12 @@
                 </div>
                 {% endif %}
                 
+                
+
+
+
+
+
                 <div class="wall">
                   <div class="wall_span">
                     <span class="wall_span_header">Стена</span>
@@ -133,7 +155,7 @@
 
                       <div class="wall_content__info">
                         <div class="name__url">
-                          <a href="{% url 'viewUser' i.user_sender_id %}">{{ i.first_name }}</a>
+                          <a href="{% url 'viewUser' i.user_sender_id %}">{{ i.first_name }} {{ i.last_name }}</a>
                         </div>
 
                         <div class="wall_content__time">

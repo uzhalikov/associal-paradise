@@ -10,7 +10,7 @@
     <li class="item_li"><a href="" class="bi bi-body-text"> Новости</a></li>
     <li class="item_li"><a href="{% url 'dialogues' %}" class="bi bi-chat-dots"> Диалоги</a></li>
     <li class="item_li"><a href="{% url 'chat' %}" class="bi bi-chat-left-dots"> Общий чат</a></li>
-    <li class="item_li"><a href="{% url 'users' %}" class="bi bi-person-circle"> Пользователи</a></li>
+    <li class="item_li"><a href="{% url 'users' %}" class="bi bi-person-circle"> Друзья </a>{% if len_followers %}[{{ len_followers }}]{% endif %}</li>
     <li class="item_li"><a href="" class="bi bi-collection"> Группы</a></li>
     <li class="item_li"><a href="{% url 'music' %}" class="bi bi-music-note-beamed"> Музыка</a></li>
     <li class="item_li"><a href="{% url 'photos' %}" class="bi bi-chat-left-dots"> Фотоальбом</a></li>

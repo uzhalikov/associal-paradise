@@ -18,23 +18,72 @@
               <div class="avatarka">
                 <img src="{% static user_profile.avatar|cut:'mysite/static' %}" class="avatarka_img">
               </div>
-              <div class="add_friend">
-                <a href="{% url 'viewDialogues' clean_id %}" class="">Написать сообщение</a>    
-              </div>                          
+              {% if not check_from and not check_to %}
+              <div class="add__friend">
+                <form method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="from_user" value="{{ userid }}">
+                  <input type="hidden" name="to_user" value="{{ clean_id }}">
+                  <button type="submit" class="add__friend__btn">Добавить в друзья</button>
+                </form>
+              </div>
+              {% elif not check_from and check_to %}
+              <div class="add__friend">
+                <form method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="to_user" value="{{ clean_id }}">
+                  <input type="hidden" name="from_user" value="{{ userid }}">
+                  <button type="submit" class="add__friend__btn">Подписан на Вас. Добавить</button>
+                </form>
+              </div>
+              {% elif check_from and not check_to  %}
+              <div class="send__req">
+                <span>Вы отправили заявку</span>
+              </div>
+              {% else %}
+              <div class="delete__friend">
+                <form method="post">
+                  {% csrf_token %}
+                  {{ delete_friend_form }}
+                  <button type="submit" class="add__friend__btn">Удалить из друзей</button>
+                </form>
+              </div>
+              {% endif %}              
+              <a href="{% url 'viewDialogues' clean_id %}" class="send__message">Написать сообщение</a>
+              {% if friends %}
+              <span class="friends__span">Друзья</span>              
               <div class="friend_list">
-                {% for user in friends %}                   
+                {% for friend in friends %}
                 <div class="friends_item">
                   <div class="friends_item_name">
-                    <a href="{% url 'viewUser' user.id %}">
-                      {{ user.first_name }}
+                    <a href="{% url 'viewUser' friend.user_id %}">
+                      {{ friend.first_name }}
                       <div class="friends_item_img">
-                        <img src="{% static user.avatar|cut:'mysite/static' %}">
+                        <img src="{% static friend.avatar|cut:'mysite/static' %}">
                       </div>                        
                     </a>                     
                   </div>
                 </div>                      
                 {% endfor %}
               </div>
+              {% endif %}
+              {% if followers %}
+              <span class="followers__span">Подписчики</span>
+              <div class="followers__list">                
+                {% for follower in followers %}                   
+                <div class="followers__item">
+                  <div class="item__name">
+                    <a href="{% url 'viewUser' user.id %}">
+                      {{ follower.first_name }}
+                      <div class="item__img">
+                        <img src="{% static follower.avatar|cut:'mysite/static' %}">
+                      </div>                        
+                    </a>                     
+                  </div>
+                </div>                      
+                {% endfor %}
+              </div>
+              {% endif %}
 
 
 
@@ -123,48 +172,33 @@
                             <div class="error">{{ form.content.errors }}</div> 
                           </div>
                           {{ form.img }} 
-                          <label for="id_img" class='clip_icon bi bi-paperclip' style='font-size: 1.5rem; color: #204768;'></label>
+                          <label for='id_img' class='clip_icon bi bi-paperclip' style='font-size: 1.5rem; color: #204768;'></label>
                           <div class="wall_form_button">                         
                             <button type="submit">Опубликовать</button>
-                          </div>                   
-  
-                                           
-                                                        
-                                            
-                      </form>                    
+                          </div>              
+                      </form>
                     </div>
-
-
-
-
-
                   {% if posts %}                  
                   {% for i in posts %}            
                   <div class="wall_content_items">
-
                     <div class="wall_content__avatar">
                       <img src="{% static i.avatar|cut:'mysite/static' %}" class="img">
                     </div>
-
                     <div class="wall_content__info">
                       <div class="name__url">
-                        <a href="{% url 'viewUser' i.user_sender_id %}">{{ i.first_name }}</a>
+                        <a href="{% url 'viewUser' i.user_sender_id %}">{{ i.first_name }} {{ i.last_name }}</a>
                       </div>
-
                       <div class="wall_content__time">
                         <span class="wall_content_data_post">{{ i.time_create }}</span>
                       </div>
-                      
                       <div class="wall_content_key">
                         {{ i.content }}
-                      </div>   
-
+                      </div>
                       <div class="wall_img">
                       {% if i.img %}                      
                         <img src="{% static i.img|cut:'mysite/static' %}">
                       {% endif %} 
-                      </div> 
-
+                      </div>
                     </div> 
                     </div>   
 

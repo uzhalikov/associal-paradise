@@ -1,6 +1,6 @@
 from .models import *
-from django.forms import ModelForm, FileInput, TextInput, DateInput, NumberInput, ChoiceField, Textarea, Select, ValidationError
-
+from django.forms import ModelForm, FileInput, TextInput, DateInput, NumberInput, ChoiceField, Textarea, Select, \
+    ValidationError
 
 
 class UserWallForm(ModelForm):
@@ -10,13 +10,27 @@ class UserWallForm(ModelForm):
 
         widgets = {
             "content": TextInput(attrs={
-                'placeholder': 'Что нового?',          
-                }),
+                'placeholder': 'Что нового?',
+            }),
             'img': FileInput(attrs={
                 'style': 'display:none',
             }),
         }
 
+
+class DeleteFriendForm(ModelForm):
+    class Meta:
+        model = FriendsList
+        fields = ['from_user', 'to_user']
+
+        widgets = {
+            "from_user": TextInput(attrs={
+                'type': 'hidden',
+            }),
+            'to_user': TextInput(attrs={
+                'type': 'hidden',
+            }),
+        }
 
 class UserProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -25,66 +39,69 @@ class UserProfileForm(ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['avatar', 'first_name', 'last_name', 'birthdate', 'gender', 'hometown', 'fav_music', 'fav_movies', 'fav_quotes', 'ciggar', 'alco', 'religion', 'about', 'plink', 'telegram', 'instagram', 'phone', 'email']
+        fields = ['avatar', 'first_name', 'last_name', 'birthdate', 'gender', 'hometown', 'fav_music', 'fav_movies',
+                  'fav_quotes', 'ciggar', 'alco', 'religion', 'about', 'plink', 'telegram', 'instagram', 'phone',
+                  'email']
 
         widgets = {
             "avatar": FileInput(attrs={
                 'class': 'change_profile_form_item',
-                }),
+            }),
             "first_name": TextInput(attrs={
                 'class': 'change_profile_form_item',
-                }),
+            }),
             "last_name": TextInput(attrs={
                 'class': 'change_profile_form_item',
-                }),
+            }),
             "birthdate": TextInput(attrs={
                 'class': 'change_profile_form_item',
-                }),
+            }),
             "gender": Select(attrs={
-                'class': 'change_profile_form_item',   
-                }),
+                'class': 'change_profile_form_item',
+            }),
             "hometown": TextInput(attrs={
-                'class': 'change_profile_form_item',   
-                }),
+                'class': 'change_profile_form_item',
+            }),
             "fav_music": TextInput(attrs={
-                'class': 'change_profile_form_item',   
-                }),
+                'class': 'change_profile_form_item',
+            }),
             "fav_movies": TextInput(attrs={
-                'class': 'change_profile_form_item',   
-                }),
+                'class': 'change_profile_form_item',
+            }),
             "fav_quotes": TextInput(attrs={
-                'class': 'change_profile_form_item',   
-                }),
+                'class': 'change_profile_form_item',
+            }),
             "ciggar": Select(attrs={
-                'class': 'change_profile_form_item',   
-                }),
+                'class': 'change_profile_form_item',
+            }),
             "alco": Select(attrs={
-                'class': 'change_profile_form_item',   
-                }),
+                'class': 'change_profile_form_item',
+            }),
             "religion": Select(attrs={
-                'class': 'change_profile_form_item',   
-                }),
+                'class': 'change_profile_form_item',
+            }),
             "about": Textarea(attrs={
                 'cols': 60,
                 'rows': 13,
-                'class': 'change_profile_form_item',   
-                }),
+                'class': 'change_profile_form_item',
+            }),
             "plink": TextInput(attrs={
                 'class': 'change_profile_form_item',
-                }),
+            }),
             "telegram": TextInput(attrs={
                 'class': 'change_profile_form_item',
-                }),
+            }),
             "instagram": TextInput(attrs={
                 'class': 'change_profile_form_item',
-                }),
+            }),
             "phone": TextInput(attrs={
                 'class': 'change_profile_form_item',
-                }),
+            }),
             "email": TextInput(attrs={
                 'class': 'change_profile_form_item',
-                }),
+            }),
         }
+
 
 class UserPhotosForm(ModelForm):
     class Meta:
@@ -93,14 +110,14 @@ class UserPhotosForm(ModelForm):
 
         widgets = {
             "content": TextInput(attrs={
-                'placeholder':'Описание',
+                'placeholder': 'Описание',
             }),
             "img": FileInput(attrs={
                 'style': 'display:none',
             })
-            }
-        
-        
+        }
+
+
 class UserMusicForm(ModelForm):
     class Meta:
         model = UserMusic
@@ -108,15 +125,15 @@ class UserMusicForm(ModelForm):
 
         widgets = {
             "title": TextInput(attrs={
-                'placeholder':'Название песни',
+                'placeholder': 'Название песни',
             }),
             "song": FileInput(attrs={
                 'style': 'display:none',
                 'accept': 'audio/mp3',
-                'preload':'auto',
+                'preload': 'auto',
             })
-            }
-        
+        }
+
 
 class ChatForm(ModelForm):
     class Meta:
@@ -130,8 +147,9 @@ class ChatForm(ModelForm):
             "msg_img": FileInput(attrs={
                 'style': 'display:none',
             })
-            }
-        
+        }
+
+
 class DialogsForm(ModelForm):
     class Meta:
         model = Dialogs
@@ -144,4 +162,4 @@ class DialogsForm(ModelForm):
             "private_img": FileInput(attrs={
                 'style': 'display:none',
             })
-            }
+        }
