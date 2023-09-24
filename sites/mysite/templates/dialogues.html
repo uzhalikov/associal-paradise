@@ -17,7 +17,11 @@
             <div class="dialogs__content">
                 {% if allDialogues %}
                 {% for dialog in allDialogues %}
+                {% if dialog.status_message == 0 %}
+                <div class="dialogs__message" style="background: #cbdeee9d;">
+                {% else %}
                 <div class="dialogs__message">
+                {% endif %}
                     <div class="dialogs__image">
                         <a href="{% url 'viewUser' dialog.user_sender_id %}"><img class="img" src="{% static dialog.avatar|cut:'mysite/static' %}"></a>
                     </div>
@@ -26,7 +30,7 @@
                             <a href="{% url 'viewUser' dialog.user_sender_id %}">{{ dialog.name_sender }}</a>
                         </div>
                         <div class="dialog__message">
-                            <a href="{% url 'viewDialogues' dialog.user_sender_id %}">{{ dialog.name_recipient }}: {% if dialog.status_message == 1 %}<span>{{ dialog.last_message }}</span>{% else %}<span style="font-weight: 900;">{{ dialog.last_message }}</span>{% endif %}</a>
+                            <a href="{% url 'viewDialogues' dialog.user_sender_id %}">{% if dialog.name_last_sender != dialog.name_recipient %}{{ dialog.name_last_sender }}: {% else %}Вы: {% endif %}{{ dialog.last_message }}</a>
                         </div>
                     </div>
                 </div>

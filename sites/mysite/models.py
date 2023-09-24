@@ -83,10 +83,12 @@ class UserWall(models.Model):
 
 class HaveDialog(models.Model):
     user_sender = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_recipient_id = models.TextField(max_length=1000, blank=True, null=True)
-    last_message = models.TextField(max_length=1000, blank=True, null=True)
-    status_message = models.BooleanField(blank=True, null=True, default=False)
+    user_recipient_id = models.TextField(max_length=1000)
+    last_message = models.TextField(max_length=1000)
+    last_sender = models.TextField(max_length=1000)
+    status_message = models.BooleanField(default=False)
     time_create = models.DateTimeField(auto_now_add=True)
+
 
     class Meta:
         verbose_name_plural = 'Наличие диалога'
