@@ -27,7 +27,7 @@ def calculation_unread(messages, userid):
 
 def getAllMessages(userid):
     allMsg = HaveDialog.objects.raw(
-        f'select 1 as id, up.first_name as name_sender, up2.first_name as name_recipient, hd.last_sender, up3.first_name as name_last_sender, hd.user_recipient_id, hd.user_sender_id, hd.status_message, up.avatar, hd.last_message from mysite_havedialog hd join mysite_userprofile up on up.user_id = hd.user_sender_id join mysite_userprofile up2 on up2.user_id = hd.user_recipient_id join mysite_userprofile up3 on up3.user_id = hd.last_sender where hd.user_recipient_id = {userid}')
+        f'select 1 as id, up.first_name as name_sender, up2.first_name as name_recipient, hd.time_update, hd.last_sender, up3.first_name as name_last_sender, hd.user_recipient_id, hd.user_sender_id, hd.status_message, up.avatar, hd.last_message from mysite_havedialog hd join mysite_userprofile up on up.user_id = hd.user_sender_id join mysite_userprofile up2 on up2.user_id = hd.user_recipient_id join mysite_userprofile up3 on up3.user_id = hd.last_sender where hd.user_recipient_id = {userid} order by hd.time_update desc')
     return allMsg
 
 
@@ -116,6 +116,13 @@ def dialogues(request):
         'allDialogues': allDialogues,
         'personal_data': personal_data
     }
+    if request.method == "POST":
+        delete_dialog = request.POST
+        HaveDialog.objects.filter(user_recipient_id=userid, user_sender_id=delete_dialog['sender_id']).delete()
+        HaveDialog.objects.filter(user_recipient_id=delete_dialog['sender_id'], user_sender_id=userid).delete()
+        Dialogs.objects.filter(user_recipient_id=userid, user_sender_id=delete_dialog['sender_id']).delete()
+        Dialogs.objects.filter(user_recipient_id=delete_dialog['sender_id'], user_sender_id=userid).delete()
+        return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
     return render(request, 'dialogues.html', data)
 
 
@@ -162,9 +169,9 @@ def viewDialogues(request, pk):
             checkDialog = HaveDialog.objects.filter(user_sender_id=userid, user_recipient_id=clean_id[0])
             if not checkDialog:
                 HaveDialog.objects.create(user_sender_id=userid, user_recipient_id=clean_id[0],
-                                          last_message=form.private_message, last_sender=userid)
+                                          last_message=form.private_message, last_sender=userid, time_update=datetime.now())
                 HaveDialog.objects.create(user_sender_id=clean_id[0], user_recipient_id=userid,
-                                          last_message=form.private_message, last_sender=userid)
+                                          last_message=form.private_message, last_sender=userid, time_update=datetime.now())
             else:
                 firstObj = HaveDialog.objects.get(user_sender_id=userid, user_recipient_id=clean_id[0])
                 secObj = HaveDialog.objects.get(user_sender_id=clean_id[0], user_recipient_id=userid)
@@ -174,10 +181,13 @@ def viewDialogues(request, pk):
                 else:
                     firstObj.last_message = 'pictures'
                     secObj.last_message = 'pictures'
+
                 firstObj.status_message = False
                 firstObj.last_sender = userid
+                firstObj.time_update = datetime.now()
                 secObj.status_message = False
                 secObj.last_sender = userid
+                secObj.time_update = datetime.now()
                 firstObj.save()
                 secObj.save()
             form.save()
@@ -317,6 +327,9 @@ def main(request, pk):
                 if form.img:
                     UserPhotos.objects.create(content=form.content, img=form.img, user_id=userid)
                 form.save()
+            else:
+                delete_post = request.POST
+                UserWall.objects.get(id=delete_post['post_id']).delete()            
         return render(request, 'main.html', data)
 
 

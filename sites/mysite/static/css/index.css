@@ -88,15 +88,18 @@ a{
     font-size: 12px;
     margin: 5px 0 0 0;
 }
-.none_photos{
+.none_photos, .none_posts{
     border: 1px solid #204768;
     padding: 10px;
-    margin: 10px 0 0 0;
+    margin: 5px 0 0 0;
     text-align: center;
     border-radius: 5px;
 }
+.none_dialogs{
+    padding: 0px 5px 5px 5px;
+    text-align: center;    
+}
 .forgot, .link{
-
     background-color: #dae2e8;
     border-radius: 5px;
     display: block;
@@ -260,11 +263,7 @@ audio{
 .wall a{
     color: #204768;
 }
-.wall_span{
-    border-bottom: 1px solid #204768;
-    font-weight: 600;
-    font-size: 18px;
-}
+
 .wall_content{
     border-radius: 7px; 
 
@@ -274,7 +273,26 @@ audio{
     padding: 5px;
     margin: 0 0 10px 0;
     display: flex;
+    position: relative;
 }
+
+.wall_content_items:hover{
+    .post__delete{
+        display: inline;
+    }
+}
+.post__delete{
+    display: none;
+    position: absolute;
+    top: 5px;
+    right: 0;
+    font-weight: 900;
+    background: none;
+    border: 1px solid #204768;
+    border-radius: 10px;
+    padding: 3px;
+}
+
 .wall_content__info{
     margin: 0 0 0 5px;
 }
@@ -324,10 +342,6 @@ audio{
 }
 .h_s_item{
     margin: 3px 0 0 0;
-}
-.wall_delete_post{
-    cursor: pointer;
-    margin: 0 0 0 60%;
 }
 .wall_content_key{
     margin: 5px 0 0 0;
@@ -570,6 +584,23 @@ audio{
     border-radius: 5px;
     display: flex;
     margin: 0 0 5px 0;
+    position: relative;
+}
+.dialogs__message:hover{
+    .dialog__delete{
+        display: inline;
+    }
+}
+.dialog__delete{
+    display: none;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-weight: 900;
+    background: none;
+    border: 1px solid #204768;
+    border-radius: 10px;
+    padding: 3px;
 }
 .img{
     width: 40px;
@@ -635,8 +666,4 @@ audio{
 }
 .user__time{
     margin: 5px 0 0 0;
-}
-.none_dialogs{
-    padding: 0px 5px 5px 5px;
-    text-align: center;    
 }

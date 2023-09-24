@@ -31,7 +31,13 @@
                         </div>
                         <div class="dialog__message">
                             <a href="{% url 'viewDialogues' dialog.user_sender_id %}">{% if dialog.name_last_sender != dialog.name_recipient %}{{ dialog.name_last_sender }}: {% else %}Вы: {% endif %}{{ dialog.last_message }}</a>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="sender_id" value="{{ dialog.user_sender_id }}">
+                                <button type="submit" class="dialog__delete">Удалить</button>                                
+                            </form>                            
                         </div>
+                        
                     </div>
                 </div>
                 {% endfor %}

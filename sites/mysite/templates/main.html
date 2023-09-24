@@ -119,16 +119,7 @@
                 </div>
                 {% endif %}
                 
-                
-
-
-
-
-
                 <div class="wall">
-                  <div class="wall_span">
-                    <span class="wall_span_header">Стена</span>
-                  </div>
                   <div class="posting">
                     <form method="post" enctype="multipart/form-data">
                       {% csrf_token %}
@@ -148,7 +139,11 @@
                   <div class="wall_content">
                   {% for i in posts %}                  
                     <div class="wall_content_items">
-
+                      <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value="{{ i.id }}">
+                        <button type="submit" class="post__delete">Удалить</button>                                
+                      </form> 
                       <div class="wall_content__avatar">
                         <img src="{% static i.avatar|cut:'mysite/static' %}" class="img">
                       </div>
@@ -173,13 +168,16 @@
                         </div> 
 
                       </div> 
+
                       </div>   
+
+                       
 
                   {% endfor %}
                 </div>
                   </div>
                   {% else %}
-                    <div class="none_photos">
+                    <div class="none_posts">
                       <p>Пока нет записей, но это временно.</p>
                     </div>    
                   {% endif %}

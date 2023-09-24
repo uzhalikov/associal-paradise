@@ -87,8 +87,7 @@ class HaveDialog(models.Model):
     last_message = models.TextField(max_length=1000)
     last_sender = models.TextField(max_length=1000)
     status_message = models.BooleanField(default=False)
-    time_create = models.DateTimeField(auto_now_add=True)
-
+    time_update = models.DateTimeField()
 
     class Meta:
         verbose_name_plural = 'Наличие диалога'

@@ -157,11 +157,6 @@
 
 
                   <div class="wall">
-                    <div class="wall_span">
-                      <span class="wall_span_header">Стена</span>
-                    </div>
-
-
                     <div class="posting">
                       <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -205,7 +200,7 @@
                   {% endfor %}
                   </div>
                   {% else %}
-                    <div class="none_photos">
+                    <div class="none_posts">
                       <p>Пока нет записей, но это временно.</p>
                     </div>    
                   {% endif %}
