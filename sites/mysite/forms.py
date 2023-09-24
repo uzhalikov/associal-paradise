@@ -111,6 +111,7 @@ class UserPhotosForm(ModelForm):
         widgets = {
             "content": TextInput(attrs={
                 'placeholder': 'Описание',
+                'autofocus': True,
             }),
             "img": FileInput(attrs={
                 'style': 'display:none',
@@ -126,6 +127,7 @@ class UserMusicForm(ModelForm):
         widgets = {
             "title": TextInput(attrs={
                 'placeholder': 'Название песни',
+                'autofocus': True,
             }),
             "song": FileInput(attrs={
                 'style': 'display:none',
@@ -142,7 +144,8 @@ class ChatForm(ModelForm):
 
         widgets = {
             "msg": TextInput(attrs={
-                'placeholder': 'Введите ваше сообщение'
+                'placeholder': 'Введите ваше сообщение',
+                'autofocus': True,
             }),
             "msg_img": FileInput(attrs={
                 'style': 'display:none',
@@ -155,9 +158,10 @@ class DialogsForm(ModelForm):
         model = Dialogs
         fields = ['private_message', 'private_img']
 
-        widgets = {
+        widgets = {            
             "private_message": TextInput(attrs={
-                'placeholder': 'Введите ваше сообщение'
+                'placeholder': 'Введите ваше сообщение',
+                'autofocus': True,
             }),
             "private_img": FileInput(attrs={
                 'style': 'display:none',

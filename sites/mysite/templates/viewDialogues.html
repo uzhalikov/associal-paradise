@@ -13,35 +13,40 @@
             {% include "menu.html" %}
         </div>
         <div class="col2_user">
-            {% for row in user_info %}
-            <div class="user__info">
-                <div class="user__info__row">
-                    <div class="user__name_photo">
-                        <a href="{% url 'viewUser' row.id %}"><img src="{% static row.avatar|cut:'mysite/static' %}" class="img"></a>
-                    </div>
-                    <div class="user__name">                    
-                        <div class="user__first_name">
-                            <a href="{% url 'viewUser' row.id %}">{{ row.first_name }} {{ row.last_name }}</a>
-                        </div>     
-                        <div class="user__time">
-                            {% if row.last_login %}Последний раз был в сети: {{ row.last_login }} {% else %} Данный пользователь еще не появлялся в сети.{% endif %}
-                        </div>       
-                    </div>
-                </div>
 
-            </div>
-            {% endfor %}
             <div class="dialogs__content2">                
                 <div class="dialogs__items">
+                    
+
+
+                    {% for row in user_info %}
+                    <div class="user__info">
+                        <div class="user__info__row">
+                            <div class="user__name_photo">
+                                <a href="{% url 'viewUser' row.id %}"><img src="{% static row.avatar|cut:'mysite/static' %}" class="img"></a>
+                            </div>
+                            <div class="user__name">                    
+                                <div class="user__first_name">
+                                    <a href="{% url 'viewUser' row.id %}">{{ row.first_name }} {{ row.last_name }}</a>
+                                </div>     
+                                <div class="user__time">
+                                    {% if row.last_login %}Последний раз был в сети: {{ row.last_login }} {% else %} Данный пользователь еще не появлялся в сети.{% endif %}
+                                </div>       
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
                     {% if dialogues %}
-                    {% for item in dialogues %}                    
+                    {% for item in dialogues %}    
+                                    
                     <div class="dialogs__item">
                         <div class="dialogs__info">
                             <div class="dialogs__image">
                                 <a href="{% url 'viewUser' item.user_sender_id %}"><img class="img" src="{% static item.avatar|cut:'mysite/static' %}"></a>
                             </div>
                             <div class="dialogs__sender">
-                                <a href="{% url 'viewUser' item.user_sender_id %}" class=''>{{ item.first_name }}</a><span class="dialogs__time">{{item.time_create}}</span>
+                                <a href="{% url 'viewUser' item.user_sender_id %}" class=''>{{ item.first_name }}</a><span class="dialogs__time">{{ item.time_create }}</span>
                                 <div class="dialog__message">
                                     {{ item.private_message }}
                                     {% if item.private_img %} 
@@ -61,6 +66,7 @@
                     {% endif %}
                 </div>
             </div>
+            
             <div class="dialog_form">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}

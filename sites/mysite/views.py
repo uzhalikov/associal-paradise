@@ -40,6 +40,8 @@ class AllUsers(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['userid'] = getAuthUser(self.request)
+        context['allDialogues'] = getAllMessages(context['userid'])
+        context['unread_messages'] = calculation_unread(context['allDialogues'], context['userid'])
         context['personal_data'] = getUser(context['userid'])
         return context
 
@@ -123,6 +125,8 @@ def viewDialogues(request, pk):
     userid = getAuthUser(request)
     personal_data = getUser(userid)
     form = DialogsForm()
+    allDialogues = getAllMessages(userid)
+    unread_messages = calculation_unread(allDialogues, userid)
     dialogues = Dialogs.objects.raw(
         f'select * from mysite_dialogs di join mysite_userprofile up on di.user_sender_id = up.user_id where di.user_sender_id = {clean_id[0]} and di.user_recipient_id = {userid} or di.user_sender_id = {userid} and di.user_recipient_id = {clean_id[0]} order by di.time_create desc')
     user_info = UserProfile.objects.raw(
@@ -141,6 +145,8 @@ def viewDialogues(request, pk):
         pass
 
     data = {
+        'allDialogues': allDialogues,
+        'unread_messages': unread_messages,
         'userid': userid,
         'dialogues': dialogues,
         'form': form,
@@ -183,10 +189,14 @@ def viewChat(request):
     userid = getAuthUser(request)
     personal_data = getUser(userid)
     form = ChatForm()
+    allDialogues = getAllMessages(userid)
+    unread_messages = calculation_unread(allDialogues, userid)
     allMessages = AllChat.objects.raw(
         'SELECT * FROM MYSITE_ALLCHAT CH JOIN MYSITE_USERPROFILE UP ON UP.USER_ID = CH.USER_ID ORDER BY CH.MSG_TIME_CREATE DESC')
 
     data = {
+        'allDialogues': allDialogues,
+        'unread_messages': unread_messages,
         'userid': userid,
         'form': form,
         'allMessages': allMessages,
@@ -205,11 +215,15 @@ def viewChat(request):
 @login_required(login_url='home')
 def photos(request):
     userid = getAuthUser(request)
+    allDialogues = getAllMessages(userid)
+    unread_messages = calculation_unread(allDialogues, userid)
     personal_data = getUser(userid)
     userPhoto = UserPhotos.objects.filter(user_id=userid).order_by('-time_create')
     form = UserPhotosForm()
     data = {
         'userid': userid,
+        'allDialogues': allDialogues,
+        'unread_messages': unread_messages,
         'userPhoto': userPhoto,
         'form': form,
         'personal_data': personal_data
@@ -228,10 +242,14 @@ def music(request):
     userid = getAuthUser(request)
     personal_data = getUser(userid)
     form = UserMusicForm()
+    allDialogues = getAllMessages(userid)
+    unread_messages = calculation_unread(allDialogues, userid)
     allSong = UserMusic.objects.all()
 
     data = {
         'userid': userid,
+        'allDialogues': allDialogues,
+        'unread_messages': unread_messages,
         'allSong': allSong,
         'form': form,
         'personal_data': personal_data
@@ -307,6 +325,8 @@ def viewUser(request, pk):
     clean_id = re.findall(r'\d+', request.path)  # Получение id пользователя
     userid = getAuthUser(request)  # Получение личного id
     personal_data = getUser(userid)
+    allDialogues = getAllMessages(userid)
+    unread_messages = calculation_unread(allDialogues, userid)
     user_followers = FriendsList.objects.raw(
         f'SELECT * FROM MYSITE_friendslist fl JOIN MYSITE_userprofile up on fl.from_user = up.user_id WHERE fl.to_user = {userid} and fl.friends = 0')
 
@@ -335,6 +355,8 @@ def viewUser(request, pk):
             'check_to': check_to,
             'followers': followers,
             'userid': userid,
+            'allDialogues': allDialogues,
+            'unread_messages': unread_messages,
             'form': form,
             'delete_friend_form': delete_friend_form,
             'clean_id': clean_id[0],
