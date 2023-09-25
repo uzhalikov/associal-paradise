@@ -136,38 +136,57 @@
                     </form>                    
                   </div>
                   {% if posts %}
-                  <div class="wall_content">
+                  <div class="user__wall">                    
                   {% for i in posts %}                  
                     <div class="wall_content_items">
-                      <form method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="post_id" value="{{ i.id }}">
-                        <button type="submit" class="post__delete">Удалить</button>                                
-                      </form> 
-                      <div class="wall_content__avatar">
-                        <img src="{% static i.avatar|cut:'mysite/static' %}" class="img">
+
+
+                      
+                      <span class="wall__like bi bi-suit-heart"></span>
+                      <span class="wall__comment bi bi-chat-left-dots"></span>
+                      
+
+                      <div class="user_wall_header">
+                        <form method="post">
+                          {% csrf_token %}
+                          <input type="hidden" name="post_id" value="{{ i.id }}">
+                          <button type="submit" class="post__delete">Удалить</button>                                
+                        </form>
+                        <div class="wall_content__avatar">
+                          <img src="{% static i.avatar|cut:'mysite/static' %}" class="img">
+                        </div>
+
+                        <div class="wall_content__info">
+
+                          <div class="name__url">
+                            <a href="{% url 'viewUser' i.user_sender_id %}">{{ i.first_name }} {{ i.last_name }}</a>
+                          </div>
+  
+                          <div class="wall_content__time">
+                            <span>{{ i.time_create }}</span>
+                          </div>
+
+                        </div>
+
                       </div>
+                     
 
-                      <div class="wall_content__info">
-                        <div class="name__url">
-                          <a href="{% url 'viewUser' i.user_sender_id %}">{{ i.first_name }} {{ i.last_name }}</a>
+  
+
+                        <div class="wall__post">
+
+                          <div class="wall_content_key">
+                            {{ i.content }}
+                          </div>
+
+                          <div class="wall_img">
+                            {% if i.img %}                      
+                              <img src="{% static i.img|cut:'mysite/static' %}">
+                            {% endif %} 
+                          </div>
+
                         </div>
-
-                        <div class="wall_content__time">
-                          <span>{{ i.time_create }}</span>
-                        </div>
-                        
-                        <div class="wall_content_key">
-                          {{ i.content }}
-                        </div>   
-
-                        <div class="wall_img">
-                        {% if i.img %}                      
-                          <img src="{% static i.img|cut:'mysite/static' %}">
-                        {% endif %} 
-                        </div> 
-
-                      </div> 
+                      
 
                       </div>   
 

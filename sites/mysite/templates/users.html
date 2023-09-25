@@ -20,7 +20,7 @@
                         <img src="{% static user.avatar|cut:'mysite/static' %}">
                     </div>
                     <div class="user_item_name">
-                        <a href="{% url 'viewUser' user.id %}" class="user_links">{{ user.first_name }} {{ user.last_name }}</a>
+                        <a href="{% url 'viewUser' user.user_id %}" class="user_links">{{ user.first_name }} {{ user.last_name }}</a>
                     </div>
                     {% if user.hometown %}
                     <div class="user_item_hometown">

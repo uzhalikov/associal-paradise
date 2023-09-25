@@ -11,22 +11,76 @@
 <div class="wrapper_change">
     {% include "header.html" %}
     <div class="rows_change">
-
         <div class="col1_change">
             {% include "menu.html" %}
         </div>
-
         <div class="col2_change">
-
+            <div class="change__data">
                 <form method="post" class="change_content_form" enctype="multipart/form-data">
                     {% csrf_token %}
-                        <ul class="form_list">                                
-                            <li class="form_list">{{ form.as_p }}</li>                   
-                        </ul>    
-                    <input type="submit" value="Сохранить изменения">
+                    <div class="change__main">
+                        <div class="change__input">
+                            {{ form.first_name }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.last_name }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.birthdate }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.gender }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.hometown }}
+                        </div>
+                    </div>
+                    <div class="change__contacts">
+                        <div class="change__input">
+                            {{ form.plink }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.telegram }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.instagram }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.phone }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.email }}
+                        </div>
+                    </div>
+                    <div class="change__additionally">
+                        <div class="change__input">
+                            {{ form.fav_music }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.fav_movies }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.fav_quotes }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.ciggar }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.alco }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.religion }}
+                        </div>
+                        <div class="change__input">
+                            {{ form.about }}
+                        </div>
+                    </div>
+                    <div class="change__btn">
+                        <button type="submit">Сохранить изменения</button>
+                    </div>
                 </form>
+            </div>
         </div>
     </div>     
-    </div>
-
+</div>
 {%endblock%}

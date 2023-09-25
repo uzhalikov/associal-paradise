@@ -38,9 +38,11 @@
                     {% endfor %}
 
                     {% if dialogues %}
+                    <div class="dialogs__item">
                     {% for item in dialogues %}    
                                     
-                    <div class="dialogs__item">
+                    
+
                         <div class="dialogs__info">
                             <div class="dialogs__image">
                                 <a href="{% url 'viewUser' item.user_sender_id %}"><img class="img" src="{% static item.avatar|cut:'mysite/static' %}"></a>
@@ -57,8 +59,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+
+                    
                     {% endfor %}
+                    </div>
                     {% else %}
                     <div class="none_dialogs">
                         <span>У вас нет переписки с данным пользователем.</span>
@@ -77,9 +81,10 @@
                       </div>
                         {{ form.private_img }} 
                         <label for="id_private_img" class='clip_icon bi bi-paperclip' style='font-size: 1.5rem; color: #204768;'></label>
-                        <div class="wall_form_button">                         
+                        <div class="wall_form_button">
                             <button type="submit">Отправить</button>
                         </div>
+
                 </form>   
             </div>
 

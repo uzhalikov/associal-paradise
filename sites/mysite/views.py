@@ -9,14 +9,19 @@ from .forms import *
 from .models import *
 from datetime import datetime
 from functools import wraps
+import os
 import re
+
+CURR_DIR = os.getcwd().replace('\\', '/') + '/' #Текущая директория
 
 
 def getAuthUser(request):
     return request.session.get('is_auth', False)
 
+
 def getUser(userid):
     return UserProfile.objects.get(user_id=userid)
+
 
 def calculation_unread(messages, userid):
     msg = 0
@@ -24,6 +29,7 @@ def calculation_unread(messages, userid):
         if i.status_message == 0 and int(i.last_sender) != userid:
             msg += 1
     return msg
+
 
 def getAllMessages(userid):
     allMsg = HaveDialog.objects.raw(
@@ -48,7 +54,7 @@ class AllUsers(LoginRequiredMixin, ListView):
     def get_queryset(self):
         userid = getAuthUser(self.request)
         data = FriendsList.objects.raw(
-        f'SELECT * FROM MYSITE_friendslist fl JOIN MYSITE_userprofile up on fl.to_user = up.user_id WHERE fl.from_user = {userid} and fl.friends = 1')
+            f'SELECT * FROM MYSITE_friendslist fl JOIN MYSITE_userprofile up on fl.to_user = up.user_id WHERE fl.from_user = {userid} and fl.friends = 1')
         return data
 
 
@@ -98,9 +104,6 @@ def reg(request):
                                        last_name=new_user_id.last_name, email=new_user_id.email)
             congr = 'Поздравляем! Вы успешно зарегистрировались и можете авторизоваться в системе.'
         return render(request, 'reg.html', {'congr': congr})
-
-
-
 
 
 @login_required(login_url='home')
@@ -169,9 +172,11 @@ def viewDialogues(request, pk):
             checkDialog = HaveDialog.objects.filter(user_sender_id=userid, user_recipient_id=clean_id[0])
             if not checkDialog:
                 HaveDialog.objects.create(user_sender_id=userid, user_recipient_id=clean_id[0],
-                                          last_message=form.private_message, last_sender=userid, time_update=datetime.now())
+                                          last_message=form.private_message, last_sender=userid,
+                                          time_update=datetime.now())
                 HaveDialog.objects.create(user_sender_id=clean_id[0], user_recipient_id=userid,
-                                          last_message=form.private_message, last_sender=userid, time_update=datetime.now())
+                                          last_message=form.private_message, last_sender=userid,
+                                          time_update=datetime.now())
             else:
                 firstObj = HaveDialog.objects.get(user_sender_id=userid, user_recipient_id=clean_id[0])
                 secObj = HaveDialog.objects.get(user_sender_id=clean_id[0], user_recipient_id=userid)
@@ -244,6 +249,11 @@ def photos(request):
             form = form.save(commit=False)
             form.user_id = userid
             form.save()
+        else:
+            delete_photo_form = request.POST
+            delete_photo = UserPhotos.objects.get(id=delete_photo_form['photo_id'])
+            os.remove(f'{CURR_DIR}{delete_photo.img}')
+            delete_photo.delete()
     return render(request, 'photos.html', data)
 
 
@@ -328,8 +338,18 @@ def main(request, pk):
                     UserPhotos.objects.create(content=form.content, img=form.img, user_id=userid)
                 form.save()
             else:
-                delete_post = request.POST
-                UserWall.objects.get(id=delete_post['post_id']).delete()            
+                try:
+                    delete_post = request.POST
+                    link_to_wall_photo = UserWall.objects.get(id=delete_post['post_id'])
+                    try:
+                        os.remove(f'{CURR_DIR}{link_to_wall_photo.img}')
+                    except:
+                        link_to_wall_photo.delete()
+                        UserPhotos.objects.get(img=link_to_wall_photo.img).delete()
+                    link_to_wall_photo.delete()
+                    UserPhotos.objects.get(img=link_to_wall_photo.img).delete()
+                except:
+                    pass
         return render(request, 'main.html', data)
 
 

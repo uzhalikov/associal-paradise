@@ -115,6 +115,7 @@ class UserPhotosForm(ModelForm):
             }),
             "img": FileInput(attrs={
                 'style': 'display:none',
+                'onchange': 'showFile()',
             })
         }
 

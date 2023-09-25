@@ -21,11 +21,11 @@
                         <div class="flex_obj">
                             <div class="photos_form">
                             {{ form.content }}
-                            <div class="error">{{ form.img.errors }}</div>
                             </div>
                             {{ form.img }}
                             <label for="id_img" class='photos_clip_icon bi bi-paperclip' style='font-size: 1.5rem; color: #204768;'></label>
-                            <div class="error">{{ form.img.errors }}</div>
+                            <div class="photo_name" id="photo_name_id">
+                            </div>
                             <div class="photos_form_button">
                                 <button type="submit">Загрузить фотографию</button>
                             </div>
@@ -35,7 +35,13 @@
                 {% if userPhoto %}
                 <div class="view_photos">
                     {% for photo in userPhoto %}
+
                     <div class="view_photo">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="photo_id" value="{{ photo.id }}">
+                            <button type="submit" class="photo__delete">Х</button>
+                        </form>
                         <img src="{% static photo.img|cut:'mysite/static' %}">
                     </div>
                     {% endfor %}
@@ -49,4 +55,6 @@
 
         </div>     
     </div>
+
+
 {%endblock%}

@@ -93,7 +93,7 @@ a{
     padding: 10px;
     margin: 5px 0 0 0;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 .none_dialogs{
     padding: 0px 5px 5px 5px;
@@ -120,7 +120,7 @@ a{
     background-color: #204768;
     padding: 0 10px;
     margin: 0 0 5px 0;
-    border-radius: 5px;    
+    border-radius: 10px;
 }
 .header__sidebar {
     display: flex;
@@ -201,10 +201,6 @@ a{
     padding: 1% 0 1% 1%; 
     margin: 0 0 5px 0;
 }
-.form_list textarea, .form_list input, .form_list select{
-    border: 1px solid #204768;
-    border-radius: 5px;
-}
 .user_photos{
     margin: 20px 0 0 0;
 }
@@ -232,9 +228,24 @@ a{
     margin: 5px 0 0 0;
  }
  .view_photo{
+    position: relative;
     width: 218.2px;
     height: 218.2px;
     margin: 0 5px 5px 0;
+ }
+ .view_photo:hover{
+    .photo__delete{
+        display: block;
+    }
+ }
+ .photo__delete{
+    display: none;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    padding: 2px;
+    background: white;
+    border-radius: 50%;
  }
 .view_photo img{
     width: 100%;
@@ -257,26 +268,25 @@ audio{
     width: 500px;
     height: 20px;
 }
-.wall{
-    margin: 5px 0 0 0;
-}
-.wall a{
-    color: #204768;
-}
 
-.wall_content{
-    border-radius: 7px; 
 
-}
+
+
+
+
+/* Стена пользователя */
 .wall_content_items{    
-    border-radius: 7px;
-    padding: 5px;
-    margin: 0 0 10px 0;
-    display: flex;
+    border-radius: 10px;
+    margin: 0 0 5px 0;
     position: relative;
+    border: 1px solid #204768;
+}
+.user_wall_header{
+    display: flex;
+    padding: 5px;
 }
 
-.wall_content_items:hover{
+.user_wall_header:hover{
     .post__delete{
         display: inline;
     }
@@ -285,20 +295,52 @@ audio{
     display: none;
     position: absolute;
     top: 5px;
-    right: 0;
+    right: 5px;
     font-weight: 900;
     background: none;
     border: 1px solid #204768;
     border-radius: 10px;
     padding: 3px;
+    color: #204768;
+}
+.wall__like{
+    position: absolute;
+    bottom: 2px;
+    right: 30px;
+    color: #204768;
+}
+.wall__comment{
+    position: absolute;
+    bottom: 2px;
+    right: 5px;
+    color: #204768;
 }
 
+.wall_content__time{
+    margin: 8px 0 0 0;
+    color: #63676b;
+}
 .wall_content__info{
     margin: 0 0 0 5px;
+
+}
+.wall_img{
+    text-align: center;
+    padding: 0 0 5px 0;
+}
+.wall_content_key{
+    padding: 5px 5px 5px 10px;
+    max-width: 550px;
+    word-wrap: break-word;
 }
 .wall_img img{
-    width: 300px;
+    max-width: 350px;
+
 }
+
+
+
+
 .photos_form{
     margin: 4px 0 0 0;
     min-width: 400px;
@@ -309,20 +351,26 @@ audio{
     border-radius: 7px;
     padding: 5px;
 }
+.change__input input{
+    border: 1px solid #204768;
+}
 .wall_form{
-    margin: 4px 0 0 0;
-    min-width: 515px;
+    margin: 5px 0 0 0;
+    width: 800px;
+}
+.dialog_form form{
+    margin: 0 0 0 15px;
 }
 .wall_form input{
     border: 1px solid #204768;
     width: 100%;
     border-radius: 7px;
-    padding: 5px;
+    padding: 4.6px;
 }
 .wall_form input:hover, .photos_form input:hover{
     background-color: #f3f3f3;
 }
-.wall_form_button button, .photos_form_button button{
+.wall_form_button button, .photos_form_button button, .change__btn button{
     border: 1px solid #204768;
     border-radius: 7px;
     color: #204768;
@@ -343,15 +391,13 @@ audio{
 .h_s_item{
     margin: 3px 0 0 0;
 }
-.wall_content_key{
-    margin: 5px 0 0 0;
-}
+
 .friend_list, .followers__list{
     display: flex;
     flex-wrap:wrap;
     justify-content: space-between;
     border: 1px solid #204768;
-    border-radius: 7px;
+    border-radius: 10px;
     width: 300px;
 }
 .friend_list a{
@@ -507,10 +553,7 @@ audio{
     color: #204768;
     font-weight: 900;
 }
-.wall_content__time{
-    margin: 8px 0 0 0;
-    color: #63676b;
-}
+
 .message__pic img{
     margin: 5px 0 5px 0;
     max-width: 225px;
@@ -575,8 +618,7 @@ audio{
     border: 1px solid #204768;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
-    overflow: auto;
-    height: 830px;
+
 } 
 .dialogs__message{
     padding: 5px 5px 5px 5px;
@@ -601,6 +643,7 @@ audio{
     border: 1px solid #204768;
     border-radius: 10px;
     padding: 3px;
+    color: #204768;
 }
 .img{
     width: 40px;
@@ -625,7 +668,6 @@ audio{
 }
 .dialogs__info{
     display: flex;
-
 }
 .dialogs__sender a{
     margin: 0 5px 0 0;
@@ -643,8 +685,15 @@ audio{
 .dialogs__item{
     margin: 0 0 5px 0;
     padding: 2px 0 2px 10px;
+    overflow: auto;
+    height: 780px;
 }
-
+.dialogs__item::-webkit-scrollbar {
+    width: 5px;
+}
+.dialogs__item::-webkit-scrollbar-thumb {
+    background-color: #204768;
+}
 .user__info{
     border-bottom: 1px solid #204768;
     padding: 2px 3px 2px 3px;
