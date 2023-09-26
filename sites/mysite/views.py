@@ -303,6 +303,7 @@ def main(request, pk):
     allDialogues = getAllMessages(userid)
     unread_messages = calculation_unread(allDialogues, userid)
     personal_data = getUser(userid)
+
     friends = FriendsList.objects.raw(
         f'SELECT * FROM MYSITE_friendslist fl JOIN MYSITE_userprofile up on fl.to_user = up.user_id WHERE fl.from_user = {userid} and fl.friends = 1')
 
@@ -338,18 +339,79 @@ def main(request, pk):
                     UserPhotos.objects.create(content=form.content, img=form.img, user_id=userid)
                 form.save()
             else:
+                post_form = request.POST
                 try:
-                    delete_post = request.POST
-                    link_to_wall_photo = UserWall.objects.get(id=delete_post['post_id'])
-                    try:
-                        os.remove(f'{CURR_DIR}{link_to_wall_photo.img}')
-                    except:
-                        link_to_wall_photo.delete()
-                        UserPhotos.objects.get(img=link_to_wall_photo.img).delete()
-                    link_to_wall_photo.delete()
-                    UserPhotos.objects.get(img=link_to_wall_photo.img).delete()
+                    post = UserWall.objects.get(id=post_form['post_id_like'])
+                    if not request.user in post.likes.all():
+                        if not request.user in post.dislikes.all():
+                            post.likes.add(request.user)
+                        else:
+                            post.dislikes.remove(request.user)
+                            post.likes.add(request.user)
+                    else:
+                        post.likes.remove(request.user)
                 except:
-                    pass
+                    try:
+                        post = UserWall.objects.get(id=post_form['post_id_dislike'])
+                        if not request.user in post.dislikes.all():
+                            if not request.user in post.likes.all():
+                                post.dislikes.add(request.user)
+                            else:
+                                post.likes.remove(request.user)
+                                post.dislikes.add(request.user)
+                        else:
+                            post.dislikes.remove(request.user)
+                    except:
+                        link_to_wall_photo = UserWall.objects.get(id=post_form['post_id'])
+                        try:
+                            os.remove(f'{CURR_DIR}{link_to_wall_photo.img}')
+                        except:
+                            try:
+                                UserPhotos.objects.get(img=link_to_wall_photo.img).delete()
+                                link_to_wall_photo.delete()
+                            except:
+                                link_to_wall_photo.delete()
+                    
+
+
+                    
+
+
+
+
+                #post_form = request.POST
+                #try:
+                #    post = UserWall.objects.get(id=post_form['post_id_like'])
+                #    print(not request.user in post.likes.all())
+                #    if not post.likes.all():
+                #        post.likes.add(request.user)
+                #    else:
+                #        for like in post.likes.all():
+                #            if like == request.user:
+                #                post.likes.remove(request.user)
+                #            else:
+                #                post.likes.add(request.user)
+                #except:
+                #    try:
+                #        post = UserWall.objects.get(id=post_form['post_id_dislike'])
+                #        if not post.dislikes.all():
+                #            post.dislikes.add(request.user)
+                #        else:
+                #            for dislike in post.dislikes.all():
+                #                if dislike == request.user:
+                #                    post.dislikes.remove(request.user)
+                #                else:
+                #                    post.dislikes.add(request.user)
+                #    except:
+                #        link_to_wall_photo = UserWall.objects.get(id=post_form['post_id'])
+                #        try:
+                #            os.remove(f'{CURR_DIR}{link_to_wall_photo.img}')
+                #        except:
+                #            try:
+                #                UserPhotos.objects.get(img=link_to_wall_photo.img).delete()
+                #                link_to_wall_photo.delete()
+                #            except:
+                #                link_to_wall_photo.delete()
         return render(request, 'main.html', data)
 
 

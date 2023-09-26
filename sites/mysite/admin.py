@@ -1,11 +1,6 @@
 from django.contrib import admin
 from .models import *
 
-#class UserProfiles(admin.ModelAdmin):
-    #list_display = ('title', 'id', 'count', 'price')
-    #search_fields = ('title', )
-    
-
 
 admin.site.register(UserProfile)
 admin.site.register(UserWall)

@@ -142,8 +142,9 @@
 
 
                       
-                      <span class="wall__like bi bi-suit-heart"></span>
-                      <span class="wall__comment bi bi-chat-left-dots"></span>
+
+
+                      
                       
 
                       <div class="user_wall_header">
@@ -185,6 +186,16 @@
                             {% endif %} 
                           </div>
 
+                          <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ i.id }}" name="post_id_like">
+                            <button class="wall__like bi bi-hand-thumbs-up" {%if i.dislikes.all%} style="right: 25px;"{%else%}style="right: 20px;"{%endif%}>{% if i.likes.all.count %}{{ i.likes.all.count }}{% endif %}</button>                            
+                          </form>
+                          <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ i.id }}" name="post_id_dislike">
+                            <button class="wall__dislike bi bi-hand-thumbs-down" {%if i.likes.all%} style="right: 5px;"{%else%}style="right: 5px;"{%endif%}>{% if i.dislikes.all.count %}{{ i.dislikes.all.count }}{% endif %}</button>
+                          </form>
                         </div>
                       
 

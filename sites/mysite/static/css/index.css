@@ -288,7 +288,7 @@ audio{
 
 .user_wall_header:hover{
     .post__delete{
-        display: inline;
+        display: inline;        
     }
 }
 .post__delete{
@@ -303,26 +303,21 @@ audio{
     padding: 3px;
     color: #204768;
 }
-.wall__like{
+.wall__like, .wall__dislike, .wall__comment{
     position: absolute;
-    bottom: 2px;
-    right: 30px;
+    bottom: 1px;
+    background: none;
     color: #204768;
 }
-.wall__comment{
-    position: absolute;
-    bottom: 2px;
-    right: 5px;
-    color: #204768;
+.wall__like:hover, .wall__dislike:hover, .wall__comment:hover{
+    transition-duration: 0.5s;
 }
-
 .wall_content__time{
     margin: 8px 0 0 0;
     color: #63676b;
 }
 .wall_content__info{
     margin: 0 0 0 5px;
-
 }
 .wall_img{
     text-align: center;
@@ -335,7 +330,6 @@ audio{
 }
 .wall_img img{
     max-width: 350px;
-
 }
 
 
