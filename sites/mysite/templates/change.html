@@ -15,71 +15,79 @@
             {% include "menu.html" %}
         </div>
         <div class="col2_change">
-            <div class="change__data">
                 <form method="post" class="change_content_form" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="change__main">
-                        <div class="change__input">
-                            {{ form.first_name }}
+                    <div class="change__data">
+
+                        <div class="change__labels">
+                            <div class="change__title">Редактировать основную информацию</div>
+                            <div class="change__label">Имя:</div>
+                            <div class="change__label">Фамилия:</div>
+                            <div class="change__label">Дата рождения:</div>
+                            <div class="change__label">Пол:</div>
+                            <div class="change__label">Родной город:</div>
+                            <div class="change__title">Редактировать контактную информацию</div>
+                            <div class="change__label">Короткая ссылка:</div>
+                            <div class="change__label">Telegram:</div>
+                            <div class="change__label">Instagram:</div>
+                            <div class="change__label">Телефон:</div>
+                            <div class="change__label">Электронная почта:</div>
+                            <div class="change__title">Редактировать дополнительную информацию</div>
+                            <div class="change__label">Любимая музыка:</div>
+                            <div class="change__label">Любимые фильмы:</div>
+                            <div class="change__label">Любимые цитаты:</div>
+                            <div class="change__label">Отношение к курению:</div>
+                            <div class="change__label">Отношение к алкоголю:</div>
+                            <div class="change__label">Религия:</div>
+                            <div class="change__label">О себе:</div>
                         </div>
-                        <div class="change__input">
-                            {{ form.last_name }}
-                        </div>
-                        <div class="change__input">
-                            {{ form.birthdate }}
-                        </div>
-                        <div class="change__input">
-                            {{ form.gender }}
-                        </div>
-                        <div class="change__input">
-                            {{ form.hometown }}
-                        </div>
-                    </div>
-                    <div class="change__contacts">
-                        <div class="change__input">
-                            {{ form.plink }}
-                        </div>
-                        <div class="change__input">
-                            {{ form.telegram }}
-                        </div>
-                        <div class="change__input">
-                            {{ form.instagram }}
-                        </div>
-                        <div class="change__input">
-                            {{ form.phone }}
-                        </div>
-                        <div class="change__input">
-                            {{ form.email }}
-                        </div>
-                    </div>
-                    <div class="change__additionally">
-                        <div class="change__input">
-                            {{ form.fav_music }}
-                        </div>
-                        <div class="change__input">
-                            {{ form.fav_movies }}
-                        </div>
-                        <div class="change__input">
-                            {{ form.fav_quotes }}
-                        </div>
-                        <div class="change__input">
-                            {{ form.ciggar }}
-                        </div>
-                        <div class="change__input">
-                            {{ form.alco }}
-                        </div>
-                        <div class="change__input">
-                            {{ form.religion }}
-                        </div>
-                        <div class="change__input">
-                            {{ form.about }}
+
+                        <div class="change__values">
+                            <div class="change__main">
+                                <div class="change__hidden">Редактировать основную информацию</div>
+                                <div class="change__input">{{ form.avatar }}
+                                <div class="change__input">{{ form.first_name }} </div>
+                                <div class="change__input">{{ form.last_name }}</div>
+                                <div class="change__input">{{ form.birthdate }}</div>
+                                <div class="change__input">{{ form.gender }}</div>
+                                <div class="change__input">{{ form.hometown }}</div>
+                            </div>
+                            <div class="change__contacts">
+                                <div class="change__hidden">Редактировать контактную информацию</div>
+                                <div class="change__input">{{ form.plink }}</div>
+                                <div class="change__input">{{ form.telegram }}</div>
+                                <div class="change__input">{{ form.instagram }}</div>
+                                <div class="change__input">{{ form.phone }}</div>
+                                <div class="change__input">{{ form.email }}</div>
+                            </div>
+                            <div class="change__additionally">
+                                <div class="change__hidden">Редактировать дополнительную информацию</div>
+                                <div class="change__input">{{ form.fav_music }}</div>
+                                <div class="change__input">{{ form.fav_movies }}</div>
+                                <div class="change__input">{{ form.fav_quotes }}</div>
+                                <div class="change__input">{{ form.ciggar }}</div>
+                                <div class="change__input">{{ form.alco }}</div>
+                                <div class="change__input">{{ form.religion }}</div>
+                                <div class="change__input">{{ form.about }}</div>
+                            </div>
                         </div>
                     </div>
+                        <div class="change__avatar">
+                            <label for="id_avatar">
+                                {% if personal_data.avatar %}
+                                <img src="{% static personal_data.avatar|cut:'mysite/static' %}">
+                                {% else %}
+                                <img src="{% static 'images/icons/none_avatar.png' %}">
+                                {% endif %}
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="change__btn">
                         <button type="submit">Сохранить изменения</button>
                     </div>
+
                 </form>
-            </div>
         </div>
     </div>     
 </div>

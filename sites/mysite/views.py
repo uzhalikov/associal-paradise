@@ -66,6 +66,7 @@ class UpdateUser(UpdateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['userid'] = getAuthUser(self.request)
+        context['personal_data'] = getUser(context['userid'])
         return context
 
 
@@ -312,7 +313,7 @@ def main(request, pk):
     userPhoto = UserPhotos.objects.filter(user_id=userid).order_by('-time_create')[:7]
     posts = UserWall.objects.raw(
         f'SELECT * FROM MYSITE_USERWALL UW JOIN MYSITE_USERPROFILE UP ON UW.USER_SENDER_ID = UP.USER_ID WHERE UW.USER_RECIPIENT_ID = {userid} ORDER BY UW.TIME_CREATE DESC')
-
+    req_user = request.user
     data = {
         'form': form,
         'friends': friends,
@@ -324,6 +325,7 @@ def main(request, pk):
         'personal_data': personal_data,
         'userPhoto': userPhoto,
         'posts': posts,
+        'req_user': req_user,
     }
 
     if int(clean_id[0]) != userid:
@@ -362,56 +364,20 @@ def main(request, pk):
                         else:
                             post.dislikes.remove(request.user)
                     except:
-                        link_to_wall_photo = UserWall.objects.get(id=post_form['post_id'])
                         try:
-                            os.remove(f'{CURR_DIR}{link_to_wall_photo.img}')
-                        except:
+                            post = UserWall.objects.get(id=post_form['post_id'])
                             try:
-                                UserPhotos.objects.get(img=link_to_wall_photo.img).delete()
-                                link_to_wall_photo.delete()
+                                os.remove(f'{CURR_DIR}{post.img}')
+                                UserPhotos.objects.get(img=post.img).delete()
+                                post.delete()
                             except:
-                                link_to_wall_photo.delete()
-                    
-
-
-                    
-
-
-
-
-                #post_form = request.POST
-                #try:
-                #    post = UserWall.objects.get(id=post_form['post_id_like'])
-                #    print(not request.user in post.likes.all())
-                #    if not post.likes.all():
-                #        post.likes.add(request.user)
-                #    else:
-                #        for like in post.likes.all():
-                #            if like == request.user:
-                #                post.likes.remove(request.user)
-                #            else:
-                #                post.likes.add(request.user)
-                #except:
-                #    try:
-                #        post = UserWall.objects.get(id=post_form['post_id_dislike'])
-                #        if not post.dislikes.all():
-                #            post.dislikes.add(request.user)
-                #        else:
-                #            for dislike in post.dislikes.all():
-                #                if dislike == request.user:
-                #                    post.dislikes.remove(request.user)
-                #                else:
-                #                    post.dislikes.add(request.user)
-                #    except:
-                #        link_to_wall_photo = UserWall.objects.get(id=post_form['post_id'])
-                #        try:
-                #            os.remove(f'{CURR_DIR}{link_to_wall_photo.img}')
-                #        except:
-                #            try:
-                #                UserPhotos.objects.get(img=link_to_wall_photo.img).delete()
-                #                link_to_wall_photo.delete()
-                #            except:
-                #                link_to_wall_photo.delete()
+                                try:
+                                    UserPhotos.objects.get(img=post.img).delete()
+                                    post.delete()
+                                except:
+                                    post.delete()
+                        except:
+                            pass
         return render(request, 'main.html', data)
 
 
@@ -422,6 +388,7 @@ def viewUser(request, pk):
     personal_data = getUser(userid)
     allDialogues = getAllMessages(userid)
     unread_messages = calculation_unread(allDialogues, userid)
+    req_user = request.user
     user_followers = FriendsList.objects.raw(
         f'SELECT * FROM MYSITE_friendslist fl JOIN MYSITE_userprofile up on fl.from_user = up.user_id WHERE fl.to_user = {userid} and fl.friends = 0')
 
@@ -432,14 +399,12 @@ def viewUser(request, pk):
         delete_friend_form = DeleteFriendForm(initial={'from_user': userid, 'to_user': clean_id[0]})
         photos = UserPhotos.objects.filter(user_id=clean_id[0])[:7]
         music = UserMusic.objects.filter(user_id=clean_id[0])
-
         posts = posts = UserWall.objects.raw(
             f'SELECT * FROM MYSITE_USERWALL UW JOIN MYSITE_USERPROFILE UP ON UW.USER_SENDER_ID = UP.USER_ID WHERE UW.USER_RECIPIENT_ID = {clean_id[0]} ORDER BY UW.TIME_CREATE DESC')
         friends = FriendsList.objects.raw(
             f'SELECT * FROM MYSITE_friendslist fl JOIN MYSITE_userprofile up on fl.from_user = up.user_id WHERE fl.to_user = {clean_id[0]} and fl.friends = 1')
         followers = FriendsList.objects.raw(
             f'SELECT * FROM MYSITE_friendslist fl JOIN MYSITE_userprofile up on fl.from_user = up.user_id WHERE fl.to_user = {clean_id[0]} and fl.friends = 0')
-
         user_profile = UserProfile.objects.get(user_id=clean_id[0])
         check_from = FriendsList.objects.filter(from_user=userid, to_user=clean_id[0])
         check_to = FriendsList.objects.filter(from_user=clean_id[0], to_user=userid)
@@ -461,11 +426,11 @@ def viewUser(request, pk):
             'friends': friends,
             'user_profile': user_profile,
             'personal_data': personal_data,
+            'req_user': req_user,
         }
 
         if request.method == "POST":
-            add_friend = request.POST
-            delete_friend = DeleteFriendForm(request.POST)
+            post_form = request.POST
             leave_note = UserWallForm(request.POST, request.FILES)
             if leave_note.is_valid():
                 leave_note = leave_note.save(commit=False)
@@ -473,21 +438,60 @@ def viewUser(request, pk):
                 leave_note.user_recipient_id = clean_id[0]
                 leave_note.save()
             else:
-                if not check_from and not check_to:
-                    FriendsList.objects.create(from_user=add_friend['from_user'], to_user=add_friend['to_user'])
-                    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-                elif not check_from and check_to:
-                    FriendsList.objects.create(from_user=add_friend['from_user'], to_user=add_friend['to_user'],
-                                               friends=1)
-                    FriendsList.objects.filter(from_user=add_friend['to_user'], to_user=add_friend['from_user']).update(
-                        friends=1)
-                    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-                else:
-                    # FriendsList.objects.filter(from_user=delete_friend['from_user'].value(), to_user=delete_friend['to_user'].value(), friends=1).delete()
-                    # FriendsList.objects.filter(from_user=delete_friend['to_user'].value(), to_user=delete_friend['from_user'].value(), friends=1).delete()
-                    FriendsList.objects.filter(from_user=userid,
-                                               to_user=clean_id[0]).delete()
-                    FriendsList.objects.filter(from_user=clean_id[0], to_user=userid).update(
-                        friends=0)
-                    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+                post_form = request.POST
+                try:
+                    post = UserWall.objects.get(id=post_form['post_id_like'])
+                    if not request.user in post.likes.all():
+                        if not request.user in post.dislikes.all():
+                            post.likes.add(request.user)
+                        else:
+                            post.dislikes.remove(request.user)
+                            post.likes.add(request.user)
+                    else:
+                        post.likes.remove(request.user)
+                except:
+                    try:
+                        post = UserWall.objects.get(id=post_form['post_id_dislike'])
+                        if not request.user in post.dislikes.all():
+                            if not request.user in post.likes.all():
+                                post.dislikes.add(request.user)
+                            else:
+                                post.likes.remove(request.user)
+                                post.dislikes.add(request.user)
+                        else:
+                            post.dislikes.remove(request.user)
+                    except:
+                        try:
+                            post = UserWall.objects.get(id=post_form['post_id'])
+                            try:
+                                os.remove(f'{CURR_DIR}{post.img}')
+                                UserPhotos.objects.get(img=post.img).delete()
+                                post.delete()
+                            except:
+                                try:
+                                    UserPhotos.objects.get(img=post.img).delete()
+                                    post.delete()
+                                except:
+                                    post.delete()
+                        except:
+                            try:
+                                post = request.POST
+                                if post['from_user']:                           
+                                    if not check_from and not check_to:
+                                        FriendsList.objects.create(from_user=post['from_user'], to_user=post['to_user'])
+                                        return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+                                    elif not check_from and check_to:
+                                        FriendsList.objects.create(from_user=post['from_user'], to_user=post['to_user'],
+                                                                friends=1)
+                                        FriendsList.objects.filter(from_user=post['to_user'], to_user=post['from_user']).update(
+                                            friends=1)
+                                        return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+                                    else:
+                                        FriendsList.objects.filter(from_user=userid,
+                                                                to_user=clean_id[0]).delete()
+                                        FriendsList.objects.filter(from_user=clean_id[0], to_user=userid).update(
+                                            friends=0)
+                                        return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+                            except:
+                                pass                                
         return render(request, 'view_user.html', data)

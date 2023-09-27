@@ -1,13 +1,11 @@
 from .models import *
-from django.forms import ModelForm, FileInput, TextInput, DateInput, NumberInput, ChoiceField, Textarea, Select, \
-    ValidationError
+from django.forms import ModelForm, FileInput, TextInput, DateInput, NumberInput, ChoiceField, Textarea, DateTimeInput
 
 
 class UserWallForm(ModelForm):
     class Meta:
         model = UserWall
         fields = ['content', 'img']
-
         widgets = {
             "content": TextInput(attrs={
                 'placeholder': 'Что нового?',
@@ -22,7 +20,6 @@ class DeleteFriendForm(ModelForm):
     class Meta:
         model = FriendsList
         fields = ['from_user', 'to_user']
-
         widgets = {
             "from_user": TextInput(attrs={
                 'type': 'hidden',
@@ -32,73 +29,22 @@ class DeleteFriendForm(ModelForm):
             }),
         }
 
-class UserProfileForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['gender'].empty_label = 'Пол не указан'
 
+class UserProfileForm(ModelForm):
     class Meta:
         model = UserProfile
         fields = ['avatar', 'first_name', 'last_name', 'birthdate', 'gender', 'hometown', 'fav_music', 'fav_movies',
                   'fav_quotes', 'ciggar', 'alco', 'religion', 'about', 'plink', 'telegram', 'instagram', 'phone',
                   'email']
-
         widgets = {
-            "avatar": FileInput(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "first_name": TextInput(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "last_name": TextInput(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "birthdate": TextInput(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "gender": Select(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "hometown": TextInput(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "fav_music": TextInput(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "fav_movies": TextInput(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "fav_quotes": TextInput(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "ciggar": Select(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "alco": Select(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "religion": Select(attrs={
-                'class': 'change_profile_form_item',
-            }),
             "about": Textarea(attrs={
-                'cols': 60,
-                'rows': 13,
-                'class': 'change_profile_form_item',
+                'placeholder': 'Максимум 150 символов.',
             }),
-            "plink": TextInput(attrs={
-                'class': 'change_profile_form_item',
+            "avatar": FileInput(attrs={
+                'style': 'display: none',
             }),
-            "telegram": TextInput(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "instagram": TextInput(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "phone": TextInput(attrs={
-                'class': 'change_profile_form_item',
-            }),
-            "email": TextInput(attrs={
-                'class': 'change_profile_form_item',
+            "birthdate": DateInput(attrs={
+                'type': 'date'
             }),
         }
 
@@ -114,9 +60,8 @@ class UserPhotosForm(ModelForm):
                 'autofocus': True,
             }),
             "img": FileInput(attrs={
-                'style': 'display:none',
-                'onchange': 'showFile()',
-            })
+                'style': 'display: none',
+            }),
         }
 
 
@@ -159,7 +104,7 @@ class DialogsForm(ModelForm):
         model = Dialogs
         fields = ['private_message', 'private_img']
 
-        widgets = {            
+        widgets = {
             "private_message": TextInput(attrs={
                 'placeholder': 'Введите ваше сообщение',
                 'autofocus': True,

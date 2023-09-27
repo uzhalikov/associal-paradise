@@ -25,7 +25,8 @@ html,body{
 }
 input,button,textarea{font-family:inherit;}
 input::-ms-clear{display: none;}
-button{cursor: pointer;}
+
+button{cursor: pointer;background: none;}
 button::-moz-focus-inner {padding:0;border:0;}
 a, a:visited{text-decoration: none; color: black;}
 a:hover{text-decoration: none;}
@@ -139,10 +140,14 @@ a{
 .header__item{
     margin: 10px 0 5px 0;
 }
-.avatarka_img{
+.avatarka{
+    width: 300px;
+}
+.avatarka img{
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 10px;
 }
 .item_li{
     margin: 0 0 6px 0;
@@ -215,7 +220,7 @@ a{
     width: 83px;
     height: 83px;
     object-fit: cover;
-    border-radius: 5px;
+    border-radius: 10px;
     margin: 0 2px 0 0;
  }
  .view_photos{
@@ -283,7 +288,7 @@ audio{
 }
 .user_wall_header{
     display: flex;
-    padding: 5px;
+    padding: 5px 5px 0 5px;
 }
 
 .user_wall_header:hover{
@@ -315,6 +320,7 @@ audio{
 .wall_content__time{
     margin: 8px 0 0 0;
     color: #63676b;
+    font-size: 16px;
 }
 .wall_content__info{
     margin: 0 0 0 5px;
@@ -323,13 +329,16 @@ audio{
     text-align: center;
     padding: 0 0 5px 0;
 }
-.wall_content_key{
-    padding: 5px 5px 5px 10px;
-    max-width: 550px;
-    word-wrap: break-word;
-}
 .wall_img img{
     max-width: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.wall_content_key{
+    padding: 5px 5px 0px 10px;
+    max-width: 550px;
+    word-wrap: break-word;
 }
 
 
@@ -345,9 +354,86 @@ audio{
     border-radius: 7px;
     padding: 5px;
 }
-.change__input input{
-    border: 1px solid #204768;
+
+
+
+.change__data{
+    display: flex;
+    font-size: 16px;
 }
+
+.change__label{
+    padding: 1px 0 1px 0;
+    font-size: 16px;
+    border-radius: 5px;
+    margin: 0 0 5px 0;
+    height: 25px;
+
+}
+.change__title{
+    margin: 0 0 5px 0;
+    font-weight: 900;
+    height: 25px;
+    padding: 1px 0 1px 0;
+
+}
+.change__hidden{
+    margin: 0 0 5px 0;
+    font-weight: 900;
+    height: 25px;
+    padding: 1px 0 1px 0;
+    visibility: hidden;
+}
+.change__input input, select{
+    border: 1px solid #204768;
+    padding: 1px 0 1px 2px;
+    font-size: 16px;
+    border-radius: 5px;
+    margin: 0 0 5px 0;
+    height: 25px;
+    width: 200px;
+}
+.change__input textarea{
+    border: 1px solid #204768;
+    padding: 5px;
+    font-size: 16px;
+    border-radius: 5px;
+    margin: 0 0 5px 0;
+    width: 200px;
+    height: 140px;
+    resize: none;
+}
+.change__labels{
+    margin: 0 30px 0 0;
+}
+.change__values{
+    width: 200px;
+    margin: 0 35px 0 0;
+}
+.change__avatar{
+    width: 300px;
+    height: 400px;
+    margin: 25px 0 0 0;
+}
+.change__avatar img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.change__avatar img:hover{
+  box-shadow: 0px 5px 10px 2px rgba(0, 0, 0, 0.5);
+  transform: translateY(-5px);
+}
+
+
+
+
+
+
+
+
+
 .wall_form{
     margin: 5px 0 0 0;
     width: 800px;

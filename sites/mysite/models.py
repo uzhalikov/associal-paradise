@@ -43,7 +43,7 @@ class UserProfile(models.Model):
     alco = models.CharField(max_length=1, blank=True, null=True, choices=alco_choices,
                             verbose_name='Отношение к алкоголю')
     religion = models.CharField(max_length=3, blank=True, null=True, choices=religion_choices, verbose_name='Религия')
-    about = models.TextField(max_length=500, blank=True, null=True, verbose_name='О себе')
+    about = models.TextField(max_length=150, blank=True, null=True, verbose_name='О себе')
 
     plink = models.CharField(max_length=10, blank=True, null=True, verbose_name='Короткая ссылка')
     telegram = models.CharField(max_length=30, blank=True, null=True, verbose_name='Telegram')

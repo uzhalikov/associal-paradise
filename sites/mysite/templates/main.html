@@ -7,18 +7,14 @@
     <div class="wrapper_main">
       <div class="content">
         {% include "header.html" %}
-
-         
         <div class="container">
           <div class="row">  
             <div class="col1">
               {% include "menu.html" %}
-
-            </div>
-    
+            </div>    
             <div class="col2">
               <div class="avatarka">
-                <img src="{% static personal_data.avatar|cut:'mysite/static' %}" class="avatarka_img">
+                <img src="{% static personal_data.avatar|cut:'mysite/static' %}">
               </div>
               {% if friends %}
               <span class="friends__span">Мои друзья</span>
@@ -137,16 +133,8 @@
                   </div>
                   {% if posts %}
                   <div class="user__wall">                    
-                  {% for i in posts %}                  
+                  {% for i in posts %}
                     <div class="wall_content_items">
-
-
-                      
-
-
-                      
-                      
-
                       <div class="user_wall_header">
                         <form method="post">
                           {% csrf_token %}
@@ -156,53 +144,36 @@
                         <div class="wall_content__avatar">
                           <img src="{% static i.avatar|cut:'mysite/static' %}" class="img">
                         </div>
-
                         <div class="wall_content__info">
-
                           <div class="name__url">
                             <a href="{% url 'viewUser' i.user_sender_id %}">{{ i.first_name }} {{ i.last_name }}</a>
                           </div>
-  
-                          <div class="wall_content__time">
-                            <span>{{ i.time_create }}</span>
+                            <div class="wall_content__time">
+                            <span>{{ i.time_create|date:'d M в m:h' }}</span>
                           </div>
-
                         </div>
-
                       </div>
-                     
-
-  
-
                         <div class="wall__post">
-
                           <div class="wall_content_key">
                             {{ i.content }}
                           </div>
-
                           <div class="wall_img">
                             {% if i.img %}                      
                               <img src="{% static i.img|cut:'mysite/static' %}">
                             {% endif %} 
                           </div>
-
                           <form method="post">
                             {% csrf_token %}
                             <input type="hidden" value="{{ i.id }}" name="post_id_like">
-                            <button class="wall__like bi bi-hand-thumbs-up" {%if i.dislikes.all%} style="right: 25px;"{%else%}style="right: 20px;"{%endif%}>{% if i.likes.all.count %}{{ i.likes.all.count }}{% endif %}</button>                            
+                            <button {%if req_user in i.likes.all%} class="wall__like bi bi-hand-thumbs-up-fill"{%else%}class="wall__like bi bi-hand-thumbs-up"{%endif%}{%if i.dislikes.all%} style="right: 25px;"{%else%}style="right: 20px;"{%endif%}>{% if i.likes.all.count %}{{ i.likes.all.count }}{% endif %}</button>                            
                           </form>
                           <form method="post">
                             {% csrf_token %}
                             <input type="hidden" value="{{ i.id }}" name="post_id_dislike">
-                            <button class="wall__dislike bi bi-hand-thumbs-down" {%if i.likes.all%} style="right: 5px;"{%else%}style="right: 5px;"{%endif%}>{% if i.dislikes.all.count %}{{ i.dislikes.all.count }}{% endif %}</button>
+                            <button {%if req_user in i.dislikes.all%} class="wall__dislike bi bi-hand-thumbs-down-fill"{%else%}class="wall__dislike bi bi-hand-thumbs-down"{%endif%}{%if i.likes.all%} style="right: 5px;"{%else%}style="right: 5px;"{%endif%}>{% if i.dislikes.all.count %}{{ i.dislikes.all.count }}{% endif %}</button>
                           </form>
                         </div>
-                      
-
-                      </div>   
-
-                       
-
+                    </div>
                   {% endfor %}
                 </div>
                   </div>
@@ -211,6 +182,7 @@
                       <p>Пока нет записей, но это временно.</p>
                     </div>    
                   {% endif %}
+
                 </div>                   
               </div>
             </div>
