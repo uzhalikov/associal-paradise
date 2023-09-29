@@ -5,41 +5,34 @@
 
 {% block content %}
 
-<div class="wrapper">
-	<div class="logo">
+<div class="index__container">
+	<div class="index__logo">
 		<img src="{% static 'images/icons/logo.png' %}" alt="">
 	</div>
-	<div class="content_index">
-		<nav class="nav">
-			<form action="" class="auth" method="POST">
-				{% csrf_token %}
-				<h2 class="h2">Авторизация</h2>
-				<div class="auth_log">
-					<input type="text" class="auth_log_input" placeholder="Логин" name="log" autofocus>
-				</div>
-				<div class="auth_psw">
-					<input type="password" class="auth_psw_input" placeholder="Пароль" name="psw">
-				</div>
-				<div class="auth_enter">
-					<input type="submit" class="auth_enter_btn" value="Войти">
-				</div>
-			</form>
-			<div class="go_reg">
-				<a href="{% url 'reg' %}" class="reg forgot">Регистрация</a>
+	<div class="index__form">
+		<form method="POST">
+			{% csrf_token %}
+			<h1>Авторизация</h1>
+			<div class="index__inputs">
+				<input type="text" placeholder="Логин" name="log" autofocus>
+				<input type="password" placeholder="Пароль" name="psw">
+				<button type="submit">Войти</button>
 			</div>
-			<div class="forgot_pass">
-				<a href="{% url 'forgot' %}" class="forgot">Восстановить пароль</a>
+			<div class="index__reg">
+				<a href="{% url 'reg' %}">Регистрация</a>
 			</div>
-		</nav>
-	</div>
-	<div class="errors">
-		{{ err }}
-	</div>
-	<div class="success">
-		{{ success }}
+			<div class="index__forgot">
+				<a href="{% url 'forgot' %}">Восстановить пароль</a>
+			</div>
+			<div class="errors">
+				{{ err }}
+			</div>
+			<div class="success">
+				{{ success }}
+			</div>
+		</form>
 	</div>
 </div>
-
 {% endblock %}
 
 

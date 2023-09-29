@@ -16,5 +16,6 @@ urlpatterns = [
     path('music', music, name='music'),
     path('chat', viewChat, name='chat'),
     path('dialogues', dialogues, name='dialogues'),
+    path('test', test, name='test'),
     path('dialogues/send<int:pk>', viewDialogues, name='viewDialogues'),
 ]

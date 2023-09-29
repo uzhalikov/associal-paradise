@@ -5,13 +5,13 @@ from django.contrib.auth import logout
 from django.views.generic import DetailView, UpdateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.admin import User as tstss
 from .forms import *
 from .models import *
 from datetime import datetime
 from functools import wraps
 import os
 import re
-
 CURR_DIR = os.getcwd().replace('\\', '/') + '/' #Текущая директория
 
 
@@ -295,6 +295,9 @@ def loginOut(request):
 def forgot(request):
     return render(request, 'forgot.html')
 
+def test(request):
+    return render(request, 'test.html')
+
 
 @login_required(login_url='home')
 def main(request, pk):
@@ -313,6 +316,8 @@ def main(request, pk):
     userPhoto = UserPhotos.objects.filter(user_id=userid).order_by('-time_create')[:7]
     posts = UserWall.objects.raw(
         f'SELECT * FROM MYSITE_USERWALL UW JOIN MYSITE_USERPROFILE UP ON UW.USER_SENDER_ID = UP.USER_ID WHERE UW.USER_RECIPIENT_ID = {userid} ORDER BY UW.TIME_CREATE DESC')
+    
+    like_list = UserWall.objects.raw(f'SELECT * FROM MYSITE_USERWALL_LIKES UWL JOIN MYSITE_USERPROFILE UP ON UP.USER_ID = UWL.USER_ID')
     req_user = request.user
     data = {
         'form': form,
@@ -326,6 +331,7 @@ def main(request, pk):
         'userPhoto': userPhoto,
         'posts': posts,
         'req_user': req_user,
+        'like_list': like_list,
     }
 
     if int(clean_id[0]) != userid:
@@ -344,6 +350,8 @@ def main(request, pk):
                 post_form = request.POST
                 try:
                     post = UserWall.objects.get(id=post_form['post_id_like'])
+                    
+
                     if not request.user in post.likes.all():
                         if not request.user in post.dislikes.all():
                             post.likes.add(request.user)

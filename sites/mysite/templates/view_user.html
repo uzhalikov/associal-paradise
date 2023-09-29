@@ -209,13 +209,32 @@
                           <form method="post">
                             {% csrf_token %}
                             <input type="hidden" value="{{ i.id }}" name="post_id_like">
-                            <button {%if req_user in i.likes.all%} class="wall__like bi bi-hand-thumbs-up-fill"{%else%}class="wall__like bi bi-hand-thumbs-up"{%endif%}{%if i.dislikes.all%} style="right: 25px;"{%else%}style="right: 20px;"{%endif%}>{% if i.likes.all.count %}{{ i.likes.all.count }}{% endif %}</button>                            
+                              <button class="wall__like"><img src="{% static 'images/icons/like.png' %}">{% if i.likes.all.count %}{{ i.likes.all.count }}{% endif %}</button>                          
+                            <div class="liked__users">
+                              {% for x in like_list %}
+                                {% if x.userwall_id == i.id %}
+                                  <div class="liked__images">
+                                    <img src="{% static x.avatar|cut:'mysite/static' %}">
+                                  </div>                                    
+                                {% endif %}
+                              {% endfor %}
+                            </div>
                           </form>
-                          <form method="post">
-                            {% csrf_token %}
-                            <input type="hidden" value="{{ i.id }}" name="post_id_dislike">
-                            <button {%if req_user in i.dislikes.all%} class="wall__dislike bi bi-hand-thumbs-down-fill"{%else%}class="wall__dislike bi bi-hand-thumbs-down"{%endif%}{%if i.likes.all%} style="right: 5px;"{%else%}style="right: 5px;"{%endif%}>{% if i.dislikes.all.count %}{{ i.dislikes.all.count }}{% endif %}</button>
-                          </form>
+
+                        <form method="post">
+                          {% csrf_token %}
+                          <input type="hidden" value="{{ i.id }}" name="post_id_dislike">                            
+                          <button class="wall__dislike"><img src="{% static 'images/icons/dislike.png' %}">{% if i.dislikes.all.count %}{{ i.dislikes.all.count }}{% endif %}</button>
+                          <div class="disliked__users">
+                            {% for u in like_list %}
+                              {% if u.userwall_id == i.id %}
+                                <div class="disliked__images">
+                                  <img src="{% static u.avatar|cut:'mysite/static' %}">
+                                </div>                                    
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        </form>
                         </div>
                     </div>
                   {% endfor %}
