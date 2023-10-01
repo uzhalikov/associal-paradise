@@ -6,16 +6,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link type="text/css" href="{% static 'css/index.css' %}" rel="stylesheet">
 </head>
 <body>
-    <div class="test1">
-        При наведении на этот текст, должна появиться картинка снизу.
-    </div>
-    <div class="test2"> 
-        А вот и она)
-        <img src="{% static 'images/icons/like.png' %}" >
-    </div>
-    
+    <button class="test bi bi-hand-thumbs-up-fill"></button>
+
+    <button id="growing">Кликни меня</button>
+    <script>
+        growing.onclick = function() {
+          this.style.animation = 'rotate'
+          this.style.color='red';
+        }
+        </script>
 </body>
 </html>

@@ -318,6 +318,7 @@ def main(request, pk):
         f'SELECT * FROM MYSITE_USERWALL UW JOIN MYSITE_USERPROFILE UP ON UW.USER_SENDER_ID = UP.USER_ID WHERE UW.USER_RECIPIENT_ID = {userid} ORDER BY UW.TIME_CREATE DESC')
     
     like_list = UserWall.objects.raw(f'SELECT * FROM MYSITE_USERWALL_LIKES UWL JOIN MYSITE_USERPROFILE UP ON UP.USER_ID = UWL.USER_ID')
+    dislike_list = UserWall.objects.raw(f'SELECT * FROM MYSITE_USERWALL_DISLIKES UWD JOIN MYSITE_USERPROFILE UP ON UP.USER_ID = UWD.USER_ID')
     req_user = request.user
     data = {
         'form': form,
@@ -332,6 +333,7 @@ def main(request, pk):
         'posts': posts,
         'req_user': req_user,
         'like_list': like_list,
+        'dislike_list' : dislike_list,
     }
 
     if int(clean_id[0]) != userid:

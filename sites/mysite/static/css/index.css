@@ -348,51 +348,36 @@ audio{
     color: #204768;
     font-size: 18px;
 }
+.wall__likeme{
+    box-shadow: 0px 5px 10px 2px rgba(0, 0, 0, 0.5);
+}
+.wall__like img:active{
+    transform: rotate(360deg);
+}
+
 .wall__dislike{
     right: 3px;
 }
 .wall__like img, .wall__dislike img{
     width: 18px;
 }
-.wall__post:hover{
-    .liked__users{
-        display: flex;
-    }
+.wall__like:hover + .liked__users, .wall__dislike:hover + .disliked__users{
+    display: flex;
 }
-
-
-
-.test1{
-    margin: 50px;
-}
-.test2{
-    display: none;
-    margin: 50px;
-    width: 50px;
-}
-.test1:hover{
-    .test2{
-        display: block;
-    }
-}
-
-
-
-
-
-
-
 
 .liked__users, .disliked__users{
     position: absolute;
-    bottom: 1px;
-    right: 65px;
+    bottom: 22px;
+    right: 0;
     border-radius: 5px;
     padding: 3px;
-    max-width: 100px;
-    max-height: 30px;
+    width: 85px;
+    height: 30px;
     display: none;
-
+    justify-content: right;
+}
+.liked__users:hover, .disliked__users:hover{
+    display: flex;
 }
 .liked__images img, .disliked__users img{
     width: 25px;
@@ -400,7 +385,6 @@ audio{
     border-radius: 50%;
     object-fit: cover;
 }
-
 .wall_content__time{
     margin: 8px 0 0 0;
     color: #63676b;
@@ -880,3 +864,26 @@ audio{
 .user__time{
     margin: 5px 0 0 0;
 }
+
+
+
+
+.test{
+    margin: 50px;
+    font-size: 50px;
+}
+.test:active{
+    animation: 1s rotate;
+}
+@keyframes rotate {
+    from {
+      transform: rotate(0turn);
+    }
+  
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  #growing {
+    transition: font-size 3s, color 2s;
+  }

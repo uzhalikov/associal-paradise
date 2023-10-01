@@ -171,7 +171,7 @@
                                 {% for x in like_list %}
                                   {% if x.userwall_id == i.id %}
                                     <div class="liked__images">
-                                      <img src="{% static x.avatar|cut:'mysite/static' %}">
+                                      <a href="{% url 'viewUser' x.user_id %}"><img src="{% static x.avatar|cut:'mysite/static' %}"></a>
                                     </div>                                    
                                   {% endif %}
                                 {% endfor %}
@@ -183,10 +183,10 @@
                             <input type="hidden" value="{{ i.id }}" name="post_id_dislike">                            
                             <button class="wall__dislike"><img src="{% static 'images/icons/dislike.png' %}">{% if i.dislikes.all.count %}{{ i.dislikes.all.count }}{% endif %}</button>
                             <div class="disliked__users">
-                              {% for u in like_list %}
+                              {% for u in dislike_list %}
                                 {% if u.userwall_id == i.id %}
                                   <div class="disliked__images">
-                                    <img src="{% static u.avatar|cut:'mysite/static' %}">
+                                    <a href="{% url 'viewUser' u.user_id %}"><img src="{% static u.avatar|cut:'mysite/static' %}"></a>
                                   </div>                                    
                                 {% endif %}
                               {% endfor %}
