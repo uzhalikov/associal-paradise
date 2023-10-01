@@ -12,6 +12,8 @@ from datetime import datetime
 from functools import wraps
 import os
 import re
+
+
 CURR_DIR = os.getcwd().replace('\\', '/') + '/' #Текущая директория
 
 
@@ -37,26 +39,52 @@ def getAllMessages(userid):
     return allMsg
 
 
-class AllUsers(LoginRequiredMixin, ListView):
-    model = UserProfile
-    template_name = 'users.html'
-    context_object_name = 'AllUsers'
-    login_url = 'home'
+#class AllUsers(LoginRequiredMixin, ListView):
+#    model = UserProfile
+#    template_name = 'users.html'
+#    context_object_name = 'AllUsers'
+#    login_url = 'home'
+#
+#    def get_context_data(self, *, object_list=None, **kwargs):
+#        context = super().get_context_data(**kwargs)
+#        context['userid'] = getAuthUser(self.request)
+#        context['allDialogues'] = getAllMessages(context['userid'])
+#        context['unread_messages'] = calculation_unread(context['allDialogues'], context['userid'])
+#        context['personal_data'] = getUser(context['userid'])
+#        return context
+#
+#    def get_queryset(self):
+#        userid = getAuthUser(self.request)
+#        data = FriendsList.objects.raw(
+#            f'SELECT * FROM MYSITE_friendslist fl JOIN MYSITE_userprofile up on fl.to_user = up.user_id WHERE fl.from_user = {userid} and fl.friends = 1')
+#        return data
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['userid'] = getAuthUser(self.request)
-        context['allDialogues'] = getAllMessages(context['userid'])
-        context['unread_messages'] = calculation_unread(context['allDialogues'], context['userid'])
-        context['personal_data'] = getUser(context['userid'])
-        return context
 
-    def get_queryset(self):
-        userid = getAuthUser(self.request)
-        data = FriendsList.objects.raw(
+@login_required(login_url='home')
+def viewFriends(request):
+    userid = getAuthUser(request)
+    personal_data = getUser(userid)
+    allDialogues = getAllMessages(userid)
+    unread_messages = calculation_unread(allDialogues, userid)
+    friends = FriendsList.objects.raw(
             f'SELECT * FROM MYSITE_friendslist fl JOIN MYSITE_userprofile up on fl.to_user = up.user_id WHERE fl.from_user = {userid} and fl.friends = 1')
-        return data
+    followers = FriendsList.objects.raw(
+        f'SELECT * FROM MYSITE_friendslist fl JOIN MYSITE_userprofile up on fl.from_user = up.user_id WHERE fl.to_user = {userid} and fl.friends = 0')
 
+    data = {
+        'userid': userid,
+        'personal_data': personal_data,
+        'allDialogues': allDialogues,
+        'unread_messages': unread_messages,     
+        'friends': friends,
+        'followers': followers,
+        'len_followers': len(followers),
+    }
+
+    if request.method == 'POST':
+        form = request.POST
+        data['find_user'] = UserProfile.objects.filter(first_name__contains=form['search_friend'])
+    return render(request, 'friends.html', data)
 
 class UpdateUser(UpdateView):
     model = UserProfile
@@ -418,6 +446,8 @@ def viewUser(request, pk):
         user_profile = UserProfile.objects.get(user_id=clean_id[0])
         check_from = FriendsList.objects.filter(from_user=userid, to_user=clean_id[0])
         check_to = FriendsList.objects.filter(from_user=clean_id[0], to_user=userid)
+        like_list = UserWall.objects.raw(f'SELECT * FROM MYSITE_USERWALL_LIKES UWL JOIN MYSITE_USERPROFILE UP ON UP.USER_ID = UWL.USER_ID')
+        dislike_list = UserWall.objects.raw(f'SELECT * FROM MYSITE_USERWALL_DISLIKES UWD JOIN MYSITE_USERPROFILE UP ON UP.USER_ID = UWD.USER_ID')
 
         data = {
             'len_followers': len(user_followers),
@@ -437,6 +467,8 @@ def viewUser(request, pk):
             'user_profile': user_profile,
             'personal_data': personal_data,
             'req_user': req_user,
+            'like_list': like_list,
+            'dislike_list': dislike_list,
         }
 
         if request.method == "POST":

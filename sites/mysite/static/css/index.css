@@ -614,20 +614,7 @@ audio{
     padding: 0 14px 0 14px;
     margin: 0 5px 0 0;
 }
-.user_item{
-    display: flex;
-    margin: 0 0 1% 0;
-    border: 1px solid #204768;
-    padding: 1%;
-    border-radius: 5px;
-    background-color: #f3f3f3;
-}
-.user_item_img img{
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit:scale-down;
-}
+
 .followers__span, .friends__span{
     display: block;
     width: 100%;
@@ -645,14 +632,7 @@ audio{
     text-align: center;
     padding: 5px;
 }
-.user_item_name{
-    margin: 0 0 0 5px;
-    font-size: 20px;
-}
-.user_item_name a{
-    color: #204768;
-    font-weight: 900;
-}
+
 .user_item_hometown{
     margin: 0 0 0 5px;
     font-size: 20px;
@@ -867,23 +847,53 @@ audio{
 
 
 
-
-.test{
-    margin: 50px;
-    font-size: 50px;
+/* Страница с друзьями */
+.user_list{
+    margin: 10px 0 0 0;
 }
-.test:active{
-    animation: 1s rotate;
+.users__form input{
+    border: 1px solid #204768;
+    width: 50%;
+    border-radius: 5px;
+    padding: 5px;
 }
-@keyframes rotate {
-    from {
-      transform: rotate(0turn);
-    }
-  
-    to {
-      transform: rotate(1turn);
-    }
-  }
-  #growing {
-    transition: font-size 3s, color 2s;
-  }
+.button{
+    padding: 5px;
+    border: 1px solid #204768;
+    border-radius: 5px;
+    color: #204768;
+}
+.button:active{
+    box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.5);
+    transform: translateY(0.5px);
+}
+.button:hover{
+    background: #f3f3f3;
+}
+.user_item_name a{
+    color: #204768;
+    font-weight: 900;
+}
+.user__send{
+    margin: 5px 0 0 0;
+}
+.user__send a{
+    font-weight: normal;
+    font-size: 16px;
+}
+.user_item{
+    display: flex;
+    margin: 0 0 5px 0;
+    border-bottom: 1px solid #d3d9de;
+    padding: 5px;
+}
+.user_item_img img{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit:cover;
+}
+.user_item_name{
+    margin: 0 0 0 10px;
+    font-size: 18px;
+}

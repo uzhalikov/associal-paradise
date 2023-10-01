@@ -1,0 +1,61 @@
+{%extends 'base.html'%}
+{% load static %}
+
+{%block title%}Мои друзья{%endblock%}
+
+
+{%block content%}
+    <div class="wrapper_users">
+    {% include "header.html" %}
+    <div class="rows_user">
+        <div class="col1_user">
+            {% include "menu.html" %}
+        </div>
+        <div class="col2_user">
+            <div class="users__form">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="text" name="search_friend" placeholder="Имя пользователя" autofocus>                   
+                    <button type="submit" class="button">Поиск</button>
+                </form>
+            </div>
+            {% if find_user %}
+            <div class="search__result">
+                {% for user in find_user %}
+                <div class="user_item">
+                    <div class="user_item_img">
+                        <a href="{% url 'viewUser' user.user_id %}" class="user_links"><img src="{% static user.avatar|cut:'mysite/static' %}"></a>
+                    </div>
+                    <div class="user_item_name">
+                        <a href="{% url 'viewUser' user.user_id %}" class="user_links">{{ user.first_name }} {{ user.last_name }}</a>
+                        <div class="user__send">
+                            <a href="">Добавить в друзья</a>
+                        </div>
+                        <div class="user__send">
+                            <a href="{% url 'viewDialogues' user.user_id %}">Написать сообщение</a>
+                        </div>
+                    </div>
+                </div>                
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="user_list">
+                {% for user in friends %}
+                <div class="user_item">
+                    <div class="user_item_img">
+                        <a href="{% url 'viewUser' user.user_id %}" class="user_links"><img src="{% static user.avatar|cut:'mysite/static' %}"></a>
+                    </div>
+                    <div class="user_item_name">
+                        <a href="{% url 'viewUser' user.user_id %}" class="user_links">{{ user.first_name }} {{ user.last_name }}</a>
+                        <div class="user__send">
+                            <a href="{% url 'viewDialogues' user.user_id %}">Написать сообщение</a>
+                        </div>
+                    </div>
+                </div>                
+                {% endfor %}
+            </div>
+        </div>
+    </div> 
+    </div>
+{%endblock%}
