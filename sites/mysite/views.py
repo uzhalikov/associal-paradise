@@ -6,6 +6,7 @@ from django.views.generic import DetailView, UpdateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.admin import User as tstss
+from django.core.paginator import Paginator
 from .forms import *
 from .models import *
 from datetime import datetime
@@ -230,21 +231,30 @@ def viewDialogues(request, pk):
 
 @login_required(login_url='home')
 def viewChat(request):
+    clean_id = re.findall(r'\d+', request.path)
     userid = getAuthUser(request)
     personal_data = getUser(userid)
     form = ChatForm()
     allDialogues = getAllMessages(userid)
     unread_messages = calculation_unread(allDialogues, userid)
     allMessages = AllChat.objects.raw(
-        'SELECT * FROM MYSITE_ALLCHAT CH JOIN MYSITE_USERPROFILE UP ON UP.USER_ID = CH.USER_ID ORDER BY CH.MSG_TIME_CREATE DESC')
+        'SELECT * FROM MYSITE_ALLCHAT CH JOIN MYSITE_USERPROFILE UP ON UP.USER_ID = CH.USER_ID ORDER BY CH.MSG_TIME_CREATE DESC')[:160]
+    paginator = Paginator(allMessages, 16)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    for i in page_obj:
+        if i is page_number:
+            print('нашел')
 
     data = {
-        'allDialogues': allDialogues,
         'unread_messages': unread_messages,
         'userid': userid,
         'form': form,
         'allMessages': allMessages,
-        'personal_data': personal_data
+        'personal_data': personal_data,
+        'page_obj': page_obj,
+        'page_number': page_number,
     }
 
     if request.method == "POST":

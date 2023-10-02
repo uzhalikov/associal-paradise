@@ -663,6 +663,8 @@ audio{
     cursor: default;
     font-size: 15px;
 }
+
+/* Чат*/
 .chat{
     height: 840px;
     overflow: auto;
@@ -726,6 +728,31 @@ audio{
     border: 1px solid #204768;
     border-radius: 5px;
 }
+.message__pages{
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    max-width: 200px;
+}
+.message__pages-item a{
+    color: #204768;
+}
+.message__curr a{
+    border: 1px solid #204768;
+    border-radius: 50%;
+    padding: 3px;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 .dialog_form{
     border: 1px solid #204768;

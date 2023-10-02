@@ -29,8 +29,10 @@
                         </form>
                     </div> 
 
-                <div class="chat">                      
-                    {% for message in allMessages %}
+                <div class="chat">          
+                    
+                    
+                    {% for message in page_obj %}
                     <div class="message">
                         <div class="message__user_photo">    
                             <a href="{% url 'viewUser' message.user_id %}">
@@ -54,8 +56,23 @@
                                 {% endif %}
                             </div>
                         </div>
-                    </div>
+                    </div>                    
                     {% endfor %}
+
+                    <div class="message__pages">
+                        {% for p in page_obj.paginator.page_range %}
+                        
+                            {% if p in page_number %}
+                                <div class="message__pages-item message__curr">
+                                    <a href="?page={{ p }}">{{ p }}</a>  
+                                </div>  
+                            {% else %}
+                                <div class="message__pages-item">
+                                    <a href="?page={{ p }}">{{ p }}</a>  
+                                </div>
+                            {% endif %}                      
+                        {% endfor %}
+                    </div>   
             </div>  
        
   
