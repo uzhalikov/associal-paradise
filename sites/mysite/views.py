@@ -2,18 +2,15 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 from django.contrib.auth import logout
-from django.views.generic import DetailView, UpdateView, ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import UpdateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.admin import User as tstss
 from django.core.paginator import Paginator
 from .forms import *
 from .models import *
 from datetime import datetime
-from functools import wraps
 import os
 import re
-
 
 CURR_DIR = os.getcwd().replace('\\', '/') + '/' #Текущая директория
 
@@ -38,27 +35,6 @@ def getAllMessages(userid):
     allMsg = HaveDialog.objects.raw(
         f'select 1 as id, up.first_name as name_sender, up2.first_name as name_recipient, hd.time_update, hd.last_sender, up3.first_name as name_last_sender, hd.user_recipient_id, hd.user_sender_id, hd.status_message, up.avatar, hd.last_message from mysite_havedialog hd join mysite_userprofile up on up.user_id = hd.user_sender_id join mysite_userprofile up2 on up2.user_id = hd.user_recipient_id join mysite_userprofile up3 on up3.user_id = hd.last_sender where hd.user_recipient_id = {userid} order by hd.time_update desc')
     return allMsg
-
-
-#class AllUsers(LoginRequiredMixin, ListView):
-#    model = UserProfile
-#    template_name = 'users.html'
-#    context_object_name = 'AllUsers'
-#    login_url = 'home'
-#
-#    def get_context_data(self, *, object_list=None, **kwargs):
-#        context = super().get_context_data(**kwargs)
-#        context['userid'] = getAuthUser(self.request)
-#        context['allDialogues'] = getAllMessages(context['userid'])
-#        context['unread_messages'] = calculation_unread(context['allDialogues'], context['userid'])
-#        context['personal_data'] = getUser(context['userid'])
-#        return context
-#
-#    def get_queryset(self):
-#        userid = getAuthUser(self.request)
-#        data = FriendsList.objects.raw(
-#            f'SELECT * FROM MYSITE_friendslist fl JOIN MYSITE_userprofile up on fl.to_user = up.user_id WHERE fl.from_user = {userid} and fl.friends = 1')
-#        return data
 
 
 @login_required(login_url='home')
@@ -161,7 +137,7 @@ def dialogues(request):
 
 @login_required(login_url='home')
 def viewDialogues(request, pk):
-    clean_id = re.findall(r'\d+', request.path)  # Получение id пользователя
+    clean_id = re.findall(r'\d+', request.path)
     userid = getAuthUser(request)
     personal_data = getUser(userid)
     form = DialogsForm()
@@ -231,9 +207,8 @@ def viewDialogues(request, pk):
 
 @login_required(login_url='home')
 def viewChat(request):
-    clean_id = re.findall(r'\d+', request.path)
     userid = getAuthUser(request)
-    personal_data = getUser(userid)
+    personal_data = getUser(userid) 
     form = ChatForm()
     allDialogues = getAllMessages(userid)
     unread_messages = calculation_unread(allDialogues, userid)
@@ -243,10 +218,6 @@ def viewChat(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    for i in page_obj:
-        if i is page_number:
-            print('нашел')
-
     data = {
         'unread_messages': unread_messages,
         'userid': userid,
@@ -254,7 +225,6 @@ def viewChat(request):
         'allMessages': allMessages,
         'personal_data': personal_data,
         'page_obj': page_obj,
-        'page_number': page_number,
     }
 
     if request.method == "POST":
@@ -263,6 +233,14 @@ def viewChat(request):
             form = form.save(commit=False)
             form.user_id = userid
             form.save()
+            return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+        else:
+            try:
+                message_del = request.POST
+                AllChat.objects.get(id=message_del['message_id']).delete()
+                return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+            except:
+                pass
     return render(request, 'chat.html', data)
 
 
@@ -333,9 +311,6 @@ def loginOut(request):
 def forgot(request):
     return render(request, 'forgot.html')
 
-def test(request):
-    return render(request, 'test.html')
-
 
 @login_required(login_url='home')
 def main(request, pk):
@@ -390,8 +365,6 @@ def main(request, pk):
                 post_form = request.POST
                 try:
                     post = UserWall.objects.get(id=post_form['post_id_like'])
-                    
-
                     if not request.user in post.likes.all():
                         if not request.user in post.dislikes.all():
                             post.likes.add(request.user)

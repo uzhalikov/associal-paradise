@@ -1,7 +1,6 @@
 from django.test import TestCase
 from mysite.models import Car
 
-
 class CarTestCase(TestCase):
     def setUp(self):
         Car.objects.create(model="Porshe 911", engine="2,8L", maxspeed=250)

@@ -153,7 +153,7 @@ class UserMusic(models.Model):
         return self.title
 
     class Meta:
-        verbose_name_plural = 'Музыка пользователей'
+        verbose_name_plural = 'Музыка'
 
 
 class FriendsList(models.Model):
@@ -173,6 +173,10 @@ class AllChat(models.Model):
     msg_time_update = models.DateTimeField(auto_now=True)
     msg_img = models.ImageField(
         upload_to="mysite/static/images/chat_photos/", blank=True, verbose_name='')
+    
+    def clean(self):
+        if self.msg == '' and self.msg_img == '':
+            raise ValidationError({'msg': ('Упс. Нужно что-то ввести :)')})
 
     class Meta:
         verbose_name_plural = 'Чат'

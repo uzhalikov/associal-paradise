@@ -25,44 +25,50 @@
                                 <label for="id_msg_img" class='clip_icon bi bi-paperclip' style='font-size: 1.5rem; color: #204768;'></label>
                                 <div class="wall_form_button">                         
                                     <button type="submit">Отправить</button>
-                                </div>                                  
+                                </div>  
+                             </div>                                  
                         </form>
                     </div> 
 
-                <div class="chat">          
-                    
-                    
+                <div class="chat">
                     {% for message in page_obj %}
-                    <div class="message">
-                        <div class="message__user_photo">    
-                            <a href="{% url 'viewUser' message.user_id %}">
-                                <img class="img" src="{% static message.avatar|cut:'mysite/static' %}">
-                            </a>
-                        </div>
-
-                        <div class="message__content">
-                            <span class="message__user">
-                                <a href="{% url 'viewUser' message.user_id %}">{{ message.first_name }}</a>
-                            </span>
-                            <span class="message__time">[{{ message.msg_time_create }}]</span> 
-                            <div class="message__item">
-                                <div class="message__text">
-                                    {{ message.msg }}
-                                </div>
-                                {% if message.msg_img %} 
-                                <div class="message__pic">
-                                    <img src="{% static message.msg_img|cut:'mysite/static' %}">
-                                </div>
-                                {% endif %}
+                        <div class="message">
+                            <div class="message__user_photo">    
+                                <a href="{% url 'viewUser' message.user_id %}">
+                                    <img class="img" src="{% static message.avatar|cut:'mysite/static' %}">
+                                </a>
                             </div>
-                        </div>
-                    </div>                    
+                            <div class="message__content">
+                                <span class="message__user">
+                                    <a href="{% url 'viewUser' message.user_id %}">{{ message.first_name }}</a>
+                                </span>
+                                <span class="message__time">[{{ message.msg_time_create }}]</span> 
+                                <div class="message__item">
+                                    <div class="message__text">
+                                        {{ message.msg }}                                    
+                                    </div>
+                                    {% if message.msg_img %} 
+                                    <div class="message__pic">
+                                        <img src="{% static message.msg_img|cut:'mysite/static' %}">
+                                    </div>
+                                    {% endif %}
+  
+                                </div>
+                            </div>
+                            <div class="message__delete">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="message_id" value="{{ message.id }}">
+                                    <button type="submit">X</button>
+                                </form>  
+                            </div>                          
+                        </div>                                    
                     {% endfor %}
 
                     <div class="message__pages">
                         {% for p in page_obj.paginator.page_range %}
-                        
-                            {% if p in page_number %}
+                                                    
+                            {% if p == clean_id %}
                                 <div class="message__pages-item message__curr">
                                     <a href="?page={{ p }}">{{ p }}</a>  
                                 </div>  

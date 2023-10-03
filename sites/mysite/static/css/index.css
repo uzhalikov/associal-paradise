@@ -325,11 +325,12 @@ audio{
 
 .user_wall_header:hover{
     .post__delete{
-        display: inline;        
+        transition: 1s;
+        opacity: 1;    
     }
 }
 .post__delete{
-    display: none;
+    opacity: 0;
     position: absolute;
     top: 5px;
     right: 5px;
@@ -493,18 +494,9 @@ audio{
     box-shadow: 0px 5px 10px 2px rgba(0, 0, 0, 0.5);
     transform: translateY(-5px);
 }
-
-
-
-
-
-
-
-
-
 .wall_form{
     margin: 5px 0 0 0;
-    width: 800px;
+    width: 900px;
 }
 .dialog_form form{
     margin: 0 0 0 15px;
@@ -679,11 +671,16 @@ audio{
     font-size: 14px;
     display: flex;
 }
+.message:hover{
+    .message__delete{
+        transition: 0.5s;
+        opacity: 1;
+    }
+}
 .message__user a{
     color: #204768;
     font-weight: 900;
 }
-
 .message__pic img{
     margin: 5px 0 5px 0;
     max-width: 225px;
@@ -699,10 +696,14 @@ audio{
 .message__time{
     font-size: 12px;
 }
-
+.message__delete{
+    opacity: 0;
+    margin: 0 0 0 65%;
+}
 .message__item{
     margin: 2px 0 0 0;
 }
+
 .chat{
     margin: 5px 0 0 0;
 }
@@ -785,11 +786,12 @@ audio{
 }
 .dialogs__message:hover{
     .dialog__delete{
-        display: inline;
+        transition: 1s;
+        opacity: 1;
     }
 }
 .dialog__delete{
-    display: none;
+    opacity: 0;
     position: absolute;
     top: 15px;
     right: 20px;
