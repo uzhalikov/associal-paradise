@@ -1,32 +1,84 @@
-{% extends 'base.html' %}
+{%extends 'base.html'%}
 {% load static %}
 
-
-{% block title %}Регистрация{% endblock %}
+{%block title%}Регистрация{%endblock%}
 
 {% block content %}
-<div class="logo">
-	<img src="{% static 'images/logo.png' %}" alt="">
-</div>
-<div class="wrapper_reg">
-	
-	<div class="reg_form">
-		<form action="" class="auth" method="POST">
+
+<div class="index__container">
+	<div class="index__logo">
+		<img src="{% static 'images/icons/logo.png' %}" alt="">
+	</div>
+	<div class="index__form" id="id__index-form">
+		<form method="POST">
 			{% csrf_token %}
 			<h1>Регистрация</h1>
-			<input type="text" placeholder="Имя" class="reg_input" name="first_name" autofocus>
-			<input type="text" placeholder="Фамилия" class="reg_input" name="last_name">
-			<input type="text" placeholder="Логин" class="reg_input" name="username">
-			<input type="email" placeholder="Электронная почта" class="reg_input" name="email">
-			<input type="password" placeholder="Пароль" class="reg_input" name="password">
-			<input type="submit" value="Зарегистрироваться"><br>
+			<div class="index__inputs">
+				<input type="text" placeholder="Имя" name="first_name" autofocus>
+				<input type="text" placeholder="Фамилия" name="last_name">
+				<input type="text" placeholder="Логин" name="username" id="id_username">
+				<input type="email" placeholder="Электронная почта" name="mail" id="id_mail">
+				<input type="password" placeholder="Пароль" name="password">
+				<input type="submit" value="Зарегистрироваться">
+			</div>
+			<div class="index__congr">
+				{{congr}}
+			</div>
+			<div class="index__back">
+				<a href="{% url 'home' %}">На главную</a>
+			</div>
 		</form>
 	</div>
-	<div class="congr">
-		{{congr}}
-	</div>
-	<div class="reg_back">
-		<a href="{% url 'home' %}" class="reg_back_link">Вернуться на главную</a>
-	</div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+	  // отслеживаем событие отправки формы
+	  $('#id_username').keyup(function () {
+		  // создаем AJAX-вызов
+		  $.ajax({
+			  data: $(this).serialize(), // получаяем данные формы
+			  url: "{% url 'validate_username' %}",
+			  // если успешно, то
+			  success: function (response) {
+				  if (response.is_user == true) {
+					  $('#usernameError').remove();
+					  $('#id__index-form').after('<div style="width: 200px; color: red; margin: 2px auto;" id="usernameError">Логин уже зарегистрирован.</div>')
+				  }
+				  else {
+					  $('#usernameError').remove();
+				  }
+			  },
+			  // если ошибка, то
+			  error: function (response) {
+				  // предупредим об ошибке
+				  console.log(response.responseJSON.errors)
+			  }
+		  });
+		  return false;
+	  });
+  });
+  $(document).ready(function () {
+	  $('#id_mail').keyup(function () {
+		  $.ajax({
+			  data: $(this).serialize(),
+			  url: "{% url 'validate_mail' %}",
+			  success: function (response) {
+				  if (response.is_mail == true) {
+					  $('#mailError').remove();
+					  $('#id__index-form').after('<div style="width: 200px; color: red; margin: 2px auto;" id="mailError">Почта уже занята.</div>')
+				  }
+				  else {
+					  $('#mailError').remove();
+				  }
+			  },
+			  error: function (response) {
+				  console.log(response.responseJSON.errors)
+			  }
+		  });
+		  return false;
+	  });
+  });
+</script>
 {% endblock %}

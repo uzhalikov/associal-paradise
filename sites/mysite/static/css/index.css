@@ -58,6 +58,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
     margin-top: 30px;
     margin-left: auto;
     margin-right: auto;
+    padding: 2px;
 }
 .index__form h1{
     margin: 10px 0 10px 0;
@@ -74,19 +75,26 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
     border-radius: 5px;
     text-align: center;  
 }
-.index__reg, .index__forgot, .index__inputs button{
-    margin: 2px 25px 2px 25px;
-    border: 3px solid #dae2e8;
-    border-radius: 5px;
-    background: #dae2e8;
+.index__inputs input:last-child{
+    background: #e1e9f0;
+    cursor: pointer;
 }
-/* Начальная страница конец */
 
-
+.index__reg, .index__forgot, .index__back{
+    border: 3px solid #dae2e8;
+    padding: 2px;
+    margin: 2px 10px 2px 10px;
+    border-radius: 5px;
+    text-align: center;  
+    background: #e1e9f0;
+    cursor: pointer;
+}
 
 
 a{
-    color: black
+    color: black;
+    width: 100%;
+    display: inline-block;
 }
 .h2{
     font-size: 18px;
@@ -108,7 +116,7 @@ a{
     border-radius: 15px;
     padding: 1%;
 }
-.congr{
+.index__congr{
     color: rgb(43, 180, 43);
     font-weight: bold;
     font-size: 18px;
@@ -554,24 +562,7 @@ audio{
     font-size: 16px;
     color: #204768;
 }
-.wrapper_reg{
-    text-align: center;
-    width: 200px;
-    border: 2px solid #204768;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 5% auto;
-}
-.wrapper_reg input{
-    border: 1px solid #204768;
-    padding: 1px;
-}
-.wrapper_reg h1{
-    margin: 0 0 5px 0;
-}
-.reg_input{
-    margin: 0 0 5px 0;
-}
+
 .wrapper_main, .wrapper_users, .wrapper_change, .wrapper_views{
     width: 1100px;
     font-size: 18px;
@@ -887,17 +878,12 @@ audio{
     padding: 5px;
 }
 .button{
-    padding: 5px;
-    border: 1px solid #204768;
-    border-radius: 5px;
+    font-size: 16px;
     color: #204768;
 }
 .button:active{
-    box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.5);
-    transform: translateY(0.5px);
-}
-.button:hover{
-    background: #f3f3f3;
+    color: #16334b;
+    font-size: 15px;
 }
 .user_item_name a{
     color: #204768;

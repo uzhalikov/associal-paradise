@@ -4,7 +4,8 @@ from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.views.generic import UpdateView
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.admin import User as tstss
+from django.contrib.auth.admin import User
+from django.http import JsonResponse
 from django.core.paginator import Paginator
 from .forms import *
 from .models import *
@@ -520,3 +521,23 @@ def viewUser(request, pk):
                             except:
                                 pass                                
         return render(request, 'view_user.html', data)
+
+
+def validate_username(request):
+    """Проверка доступности логина"""
+    username = request.GET.get('username', None)
+    
+    response = {
+        'is_user': User.objects.filter(username__iexact=username).exists()
+    }
+    return JsonResponse(response)
+
+def validate_mail(request):
+    """Проверка доступности эмейла"""
+    mail = request.GET.get('mail', None)
+    
+    response = {
+        'is_mail': UserProfile.objects.filter(email__iexact=mail).exists()
+    }
+    print(response)
+    return JsonResponse(response)
