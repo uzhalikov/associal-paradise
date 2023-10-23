@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 from django.contrib.auth import logout
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, View
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.admin import User
 from django.http import JsonResponse
@@ -98,19 +98,19 @@ def index(request):
 
 def reg(request):
     congr = ''
-    userid = getAuthUser(request)
-    if userid != False:
-        return redirect(f'/id{userid}')
-    else:
-        if request.method == 'POST':
-            data = request.POST
-            User.objects.create_user(username=data['username'], email=data['email'], password=data['password'],
-                                     first_name=data['first_name'], last_name=data['last_name'])
-            new_user_id = User.objects.get(username=data['username'])
-            UserProfile.objects.create(user_id=new_user_id.id, first_name=new_user_id.first_name,
-                                       last_name=new_user_id.last_name, email=new_user_id.email)
-            congr = 'Поздравляем! Вы успешно зарегистрировались и можете авторизоваться в системе.'
-        return render(request, 'reg.html', {'congr': congr})
+    #userid = getAuthUser(request)
+    #if userid != False:
+    #    return redirect(f'/id{userid}')
+    #else:
+    #    if request.method == 'POST':
+    #        data = request.POST
+    #        User.objects.create_user(username=data['username'], email=data['email'], password=data['password'],
+    #                                 first_name=data['first_name'], last_name=data['last_name'])
+    #        new_user_id = User.objects.get(username=data['username'])
+    #        UserProfile.objects.create(user_id=new_user_id.id, first_name=new_user_id.first_name,
+    #                                   last_name=new_user_id.last_name, email=new_user_id.email)
+    #        congr = 'Поздравляем! Вы успешно зарегистрировались и можете авторизоваться в системе.'
+    return render(request, 'reg.html', {'congr': congr})
 
 
 @login_required(login_url='home')
@@ -522,22 +522,12 @@ def viewUser(request, pk):
                                 pass                                
         return render(request, 'view_user.html', data)
 
-
-def validate_username(request):
-    """Проверка доступности логина"""
-    username = request.GET.get('username', None)
-    
-    response = {
-        'is_user': User.objects.filter(username__iexact=username).exists()
-    }
-    return JsonResponse(response)
-
-def validate_mail(request):
-    """Проверка доступности эмейла"""
-    mail = request.GET.get('mail', None)
-    
-    response = {
-        'is_mail': UserProfile.objects.filter(email__iexact=mail).exists()
-    }
-    print(response)
-    return JsonResponse(response)
+class ValidateData(View):
+    def post(self, request, *args, **kwargs):
+        username = request.POST.get('username', None)
+        email = request.POST.get('email', None)
+        context = {
+            'has_username': User.objects.filter(username__iexact=username).exists(),
+            'has_email': UserProfile.objects.filter(email__iexact=email).exists(),
+        }
+        return JsonResponse(context)

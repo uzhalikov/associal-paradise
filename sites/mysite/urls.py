@@ -16,6 +16,5 @@ urlpatterns = [
     path('chat', viewChat, name='chat'),
     path('dialogues', dialogues, name='dialogues'),
     path('dialogues/send<int:pk>', viewDialogues, name='viewDialogues'),
-    path('validate_username', validate_username, name='validate_username'),
-    path('validate_mail', validate_mail, name='validate_mail'),
+    path('validate_data/', ValidateData.as_view(), name='validate_data'),
 ]

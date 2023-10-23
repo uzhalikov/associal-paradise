@@ -169,6 +169,7 @@ a{
     padding: 2.5px 0 7px 0;
     color: white;
 }
+
 .header__logo{    
     font-family: 'Caveat', cursive;
     font-weight: 900;
@@ -911,4 +912,10 @@ audio{
 .user_item_name{
     margin: 0 0 0 10px;
     font-size: 18px;
+}
+.header__sidebar a, .sidebar a{
+    display: inline;
+}
+.index__error{
+    color: red;
 }

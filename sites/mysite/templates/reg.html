@@ -10,75 +10,49 @@
 		<img src="{% static 'images/icons/logo.png' %}" alt="">
 	</div>
 	<div class="index__form" id="id__index-form">
-		<form method="POST">
-			{% csrf_token %}
+		<form id="form">
 			<h1>Регистрация</h1>
 			<div class="index__inputs">
 				<input type="text" placeholder="Имя" name="first_name" autofocus>
 				<input type="text" placeholder="Фамилия" name="last_name">
 				<input type="text" placeholder="Логин" name="username" id="id_username">
-				<input type="email" placeholder="Электронная почта" name="mail" id="id_mail">
+				<input type="email" placeholder="Электронная почта" name="email" id="id_email">
 				<input type="password" placeholder="Пароль" name="password">
 				<input type="submit" value="Зарегистрироваться">
 			</div>
 			<div class="index__congr">
 				{{congr}}
-			</div>
+			</div>			
 			<div class="index__back">
 				<a href="{% url 'home' %}">На главную</a>
 			</div>
 		</form>
+		<div class="index__error" id="check-info"></div>
 	</div>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+
 <script>
-  $(document).ready(function () {
-	  // отслеживаем событие отправки формы
-	  $('#id_username').keyup(function () {
-		  // создаем AJAX-вызов
-		  $.ajax({
-			  data: $(this).serialize(), // получаяем данные формы
-			  url: "{% url 'validate_username' %}",
-			  // если успешно, то
-			  success: function (response) {
-				  if (response.is_user == true) {
-					  $('#usernameError').remove();
-					  $('#id__index-form').after('<div style="width: 200px; color: red; margin: 2px auto;" id="usernameError">Логин уже зарегистрирован.</div>')
-				  }
-				  else {
-					  $('#usernameError').remove();
-				  }
-			  },
-			  // если ошибка, то
-			  error: function (response) {
-				  // предупредим об ошибке
-				  console.log(response.responseJSON.errors)
-			  }
-		  });
-		  return false;
-	  });
-  });
-  $(document).ready(function () {
-	  $('#id_mail').keyup(function () {
-		  $.ajax({
-			  data: $(this).serialize(),
-			  url: "{% url 'validate_mail' %}",
-			  success: function (response) {
-				  if (response.is_mail == true) {
-					  $('#mailError').remove();
-					  $('#id__index-form').after('<div style="width: 200px; color: red; margin: 2px auto;" id="mailError">Почта уже занята.</div>')
-				  }
-				  else {
-					  $('#mailError').remove();
-				  }
-			  },
-			  error: function (response) {
-				  console.log(response.responseJSON.errors)
-			  }
-		  });
-		  return false;
-	  });
-  });
+	var checkList = document.getElementById('check-info');
+	var form = document.getElementById('form');
+	form.addEventListener('change', function(e){
+		e.preventDefault()
+		var fd = new FormData()
+		fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+		fd.append('username', document.getElementById('id_username').value)
+		fd.append('email', document.getElementById('id_email').value)
+		axios.post('/validate_data/', fd)
+		.then(function(resp){
+			if(resp.data.has_username == true){
+				checkList.innerHTML = "Данный пользователь уже существует."
+			}
+		}).catch(function(err){
+			console.log(err)
+		})
+	})
+
 </script>
 {% endblock %}
